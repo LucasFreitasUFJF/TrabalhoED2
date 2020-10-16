@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class Leitura {
     private static final char VIRGULA = ',';
     private static final char ASPAS = '"';
-    private static final String livrosCSV = "dataset.csv";
+    private static final String livrosCSV = "dataset_simp_sem_descricao.csv";
     private ArrayList<Registro> leituraDados;
     private long tempoInicial;
     private long tempoFinal;
@@ -90,7 +90,7 @@ public class Leitura {
             String texto = "";
             boolean entreAspas = false;
             int coluna = 0;
-            String[] campos = new String[25];// Vetor das colunas no arquivo csv
+            String[] campos = new String[10];// Vetor das colunas no arquivo csv
             while (linha != null && i < 540000) {
                 char[] caracteres = linha.toCharArray();// Tranforma a linha lida em um vetor de char
                 // Loop para andar em todas os campos do vetor de char
@@ -121,7 +121,7 @@ public class Leitura {
                     j++;
                 }
                 // Insere os valores no vetor de Registros
-                this.leituraDados.add( new Registro(campos[0], campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], campos[7], campos[8], campos[9], campos[10], campos[11], campos[12], campos[13], campos[14], campos[15], campos[16], campos[17], campos[18], campos[19], campos[20], campos[21], campos[22], campos[23], campos[24]) );
+                this.leituraDados.add( new Registro(campos[0], campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], campos[7], campos[8], campos[9]));
                 i++;
                 linha = leitura.readLine();// Lê a proxima linha
                 coluna = 0;// Volta para a primeira coluna
