@@ -1,0 +1,10 @@
+/build/
+authors.csv
+categories.csv
+dataset1.csv
+dataset.csv
+dataset.txt
+formats.csv
+places.csv
+
+/dist/
