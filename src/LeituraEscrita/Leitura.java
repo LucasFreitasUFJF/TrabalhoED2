@@ -1,4 +1,4 @@
-package trabalho;
+package LeituraEscrita;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -8,20 +8,29 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import Registros.Autor;
+import Registros.Categoria;
+import Registros.Livro;
 
 public class Leitura {
-    private static final char VIRGULA = ',';
-    private static final char ASPAS = '"';
-    private static final String livrosCSV = "dataset_simp_sem_descricao.csv";
-    private ArrayList<Registro> leituraDados;
+    private final char ASPAS = '"';
+    
+    private final String livrosCSV = "Entradas/dataset_simp_sem_descricao.csv";
+    private final String autoresCSV = "Entradas/authors.csv";
+    private final String categoriasCSV = "Entradas/categories.csv";
+    
     private long tempoInicial;
     private long tempoFinal;
 
     public Leitura() throws IOException {
-        this.leituraDados = new ArrayList<Registro>();
     }
     
-    //Função para ler parâmetros
+    /**
+     * Função para ler parâmetros
+     * @param arquivoNome Nome do arquivo a ser lido
+     * @return ArrayList dos parâmetros
+     * @throws IOException 
+     */
     public ArrayList<Integer> lerParametros(String arquivoNome) throws IOException {
         ArrayList<Integer> parametros = new ArrayList<>();
         try {
@@ -35,126 +44,220 @@ public class Leitura {
             leitura.close();
             return parametros;
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Leitura.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("ERRO: Não foi possível ler o arquivo de parâmetros!");
+            return null;
         }
-        
-        return null;
     }
     
-    //Retorn um vetor com N elementos do arquivo pre carregado
-    public Registro[] lerArquivo(int quantidade) throws IOException {
-        Registro[] dados = new Registro[quantidade]; //Vetor para armazenar e retornar o dados aleatórios do documento .csv
-        Random r = new Random(System.currentTimeMillis());// Classe para gerar numeros aleatórios
-        int e = 0;
-        
-        if(this.leituraDados.size() < quantidade) {
-            dados = null;
-            System.out.println("Erro: não há "+quantidade+" registros pre carregados disponiveis!");
-            return dados;
-        }
-        
-        System.out.println("Escolhendo "+ quantidade + " números aleatorios...");
-        tempoInicial = System.currentTimeMillis();
-        ArrayList<Integer> numAleatorios = new ArrayList<>(); //Lista para armazenar numeros já sorteados
-        boolean sorteado = false;
-        while (e < quantidade ) { //Gera o vetor que será ordenado/ inserido na tabela hash
-           int aleatorio = r.nextInt(leituraDados.size()); //Gera um valor aleatório entre 0 e a quantidade de registros - 1
-           for(int l=0; l<numAleatorios.size(); l++) {
-                if(aleatorio == numAleatorios.get(l)) {
-                    sorteado = true;
-                }
-           }
-
-           if(!sorteado) {
-                numAleatorios.add(aleatorio);
-                dados[e] = this.leituraDados.get(aleatorio); //insere no vetor o valor aleatorio corresponde no vetor que contem todos os registros criados
-                e++; // incrementa a variavel de controle
-           } 
-           sorteado = false;
-        }
-        tempoFinal = System.currentTimeMillis();
-        System.out.println("A randomização do arquivo demorou: " + (tempoFinal - tempoInicial) + " ms\n");
-        
-        return dados;
-    }
-    
-    //Pre recarrega os dados para o uso durante toda execução
-    public void preCarregarArquivo() throws IOException {
+    /**
+     * Função para ler livros
+     * @return Array de livros
+     * @throws IOException 
+     */
+    public Livro[] lerLivros() throws IOException {
         try {
-            System.out.println("Pre carregando arquivo em memória...");
+            ArrayList<Livro> livros = new ArrayList<>();
             tempoInicial = System.currentTimeMillis();
-            BufferedReader leitura = new BufferedReader(new FileReader(this.livrosCSV));// Lê o arquivo CSV
-            String linha = leitura.readLine();// Lê a primeira linha
-            linha = leitura.readLine();// Pula o cabeçalho do arquivo
-            int i = 0;
-            String texto = "";
-            boolean entreAspas = false;
-            int coluna = 0;
-            String[] campos = new String[10];// Vetor das colunas no arquivo csv
-            while (linha != null && i < 540000) {
-                char[] caracteres = linha.toCharArray();// Tranforma a linha lida em um vetor de char
-                // Loop para andar em todas os campos do vetor de char
-                for (int j = 0; j < caracteres.length;) {
-                    // Verifica se não está entre aspas
-                    if (entreAspas != true) {
-                        if (caracteres[j] == this.VIRGULA) {// Ignora a vírgula
+            BufferedReader leitura = new BufferedReader(new FileReader(livrosCSV));
+            String linha = leitura.readLine();
+            String[] campos = new String[10];
+            while (linha != null) {
+                divideCampos(linha.toCharArray(), campos);
+                
+                livros.add(new Livro(converteStringParaVecInt(campos[0]), campos[1], converteStringParaVecInt(campos[2]), campos[3], converterStringParaLong(campos[4]), campos[5], campos[6], campos[7], campos[8], campos[9]));
+                
+                linha = leitura.readLine();// Lê a proxima linha
+            }
+            tempoFinal = System.currentTimeMillis();
+            System.out.println("Foram lidos " + livros.size() + " livros em " + (tempoFinal - tempoInicial) + " ms\n");
+            leitura.close();
+            
+            Livro[] rLivros = livros.toArray(new Livro[livros.size()]); //Converte ArrayList para vetor
+            livros.clear(); //Libera memória do arrayList
+            return rLivros;
+        } catch (FileNotFoundException ex) {
+            System.out.println("ERRO: Não foi possível ler o arquivo de livros!"); //mensagem de erro caso não seja possivel realizar a leitura do arquivo
+            return null;
+        }
+    }
+    
+    /**
+     * Função para ler autores
+     * @return Array de autores
+     * @throws IOException 
+     */
+    public Autor[] lerAutores() throws IOException {
+        try {
+            ArrayList<Autor> autores = new ArrayList<>();
+            tempoInicial = System.currentTimeMillis();
+            BufferedReader leitura = new BufferedReader(new FileReader(autoresCSV));
+            String linha = leitura.readLine(); //Pula primeira linha
+            linha = leitura.readLine();
+            String[] campos = new String[2];
+            while (linha != null) {
+                divideCampos(linha.toCharArray(), campos);
+
+                autores.add(new Autor(converterStringParaLong(campos[0]), campos[1]));
+                
+                linha = leitura.readLine();// Lê a proxima linha
+            }
+            tempoFinal = System.currentTimeMillis();
+            System.out.println("Foram lidos " + autores.size() + " autores em " + (tempoFinal - tempoInicial) + " ms\n");
+            leitura.close();
+            
+            Autor[] rAutores = autores.toArray(new Autor[autores.size()]); //Converte ArrayList para vetor
+            autores.clear(); //Libera memória do arrayList
+            return rAutores;
+        } catch (FileNotFoundException ex) {
+            System.out.println("ERRO: Não foi possível ler o arquivo de autores!"); //mensagem de erro caso não seja possivel realizar a leitura do arquivo
+            return null;
+        }
+    }
+    
+    /**
+     * Função para ler categorias
+     * @return Array de categorias
+     * @throws IOException 
+     */
+    public Categoria[] lerCategorias() throws IOException {
+        try {
+            ArrayList<Categoria> categorias = new ArrayList<>();
+            tempoInicial = System.currentTimeMillis();
+            BufferedReader leitura = new BufferedReader(new FileReader(categoriasCSV));
+            String linha = leitura.readLine(); //Pula primeira linha
+            linha = leitura.readLine();
+            String[] campos = new String[2];
+            while (linha != null) {
+                divideCampos(linha.toCharArray(), campos);
+
+                categorias.add(new Categoria(converterStringParaLong(campos[0]), campos[1]));
+                
+                linha = leitura.readLine();// Lê a proxima linha
+            }
+            tempoFinal = System.currentTimeMillis();
+            System.out.println("Foram lidos " + categorias.size() + " autores em " + (tempoFinal - tempoInicial) + " ms\n\n");
+            leitura.close();
+            
+            Categoria[] rCategorias = categorias.toArray(new Categoria[categorias.size()]); //Converte ArrayList para vetor
+            categorias.clear(); //Libera memória do arrayList
+            return rCategorias;
+        } catch (FileNotFoundException ex) {
+            System.out.println("ERRO: Não foi possível ler o arquivo de categorias!"); //mensagem de erro caso não seja possivel realizar a leitura do arquivo
+            return null;
+        }
+    }
+    
+    /**
+     * Função para ler cada linha dos arquivos .csv e dividi-la em campos
+     * @param caracteres Vetor de caracteres
+     * @param campos Vetor para dividir os campos
+     */
+    private void divideCampos(char[] caracteres, String[] campos) {
+        boolean entreAspas = false;
+        String texto = "";
+        int coluna = 0;
+        for (int j = 0; j < caracteres.length; j++) {
+            if(entreAspas) {
+                if(caracteres[j] == this.ASPAS){
+                    if(j+1 < caracteres.length) {
+                        if(caracteres[j+1] == this.ASPAS) {
+                            texto += "\"";
+                            j++;
+                        } else {
+                            entreAspas = false;
+                            campos[coluna] = texto;
                             coluna++;
                             texto = "";
-                            j++;
                         }
+                    } else {
+                        entreAspas = false;
+                        campos[coluna] = texto;
+                        coluna++;
+                        texto = "";
                     }
-                    if (entreAspas == true && (caracteres[j] == '[' || caracteres[j] == ']')){
-                        j++;
-                    }
-                    // Verifica se o caractere é aspas
-                    if ( caracteres[j] == this.ASPAS ) {
-                        if (entreAspas) { entreAspas = false; }// Se tiver fora das aspas
-                        else { entreAspas = true; }// Se tiver entre aspas
-                    }
-                    // Verifica se é um campo vazio no vetor
-                    if (caracteres[j] == this.ASPAS && j+1 < caracteres.length ) {
-                        if(caracteres[j+1] == this.ASPAS ){ texto = ""; }
-                    }
-                    texto += caracteres[j];// Concatena os caracteres
-                    campos[coluna] = texto;// Coloca o texto no vetor das colunas
-                    campos[coluna] = campos[coluna].replaceAll("\"", "");// Remove as aspas dos textos
-                    j++;
+                } else {
+                    texto += caracteres[j];
                 }
-                // Insere os valores no vetor de Registros
-                this.leituraDados.add( new Registro(campos[0], campos[1], campos[2], campos[3], campos[4], campos[5], campos[6], campos[7], campos[8], campos[9]));
-                i++;
-                linha = leitura.readLine();// Lê a proxima linha
-                coluna = 0;// Volta para a primeira coluna
-                texto = "";// Reseta o texto
-                
-                //Temporário. Apenas para verificar andamento da leitura
-                if(this.leituraDados.size() == 100000) {
-                    System.out.println("100.000");
-                } else if(this.leituraDados.size() == 150000) {
-                    System.out.println("150.000");
-                } else if(this.leituraDados.size() == 200000) {
-                    System.out.println("200.000");
-                } else if(this.leituraDados.size() == 250000) {
-                    System.out.println("250.000");
-                } else if(this.leituraDados.size() == 300000) {
-                    System.out.println("300.000");
-                } else if(this.leituraDados.size() == 350000) {
-                    System.out.println("350.000");
-                } else if(this.leituraDados.size() == 400000) {
-                    System.out.println("400.000");
-                } else if(this.leituraDados.size() == 450000) {
-                    System.out.println("450.000");
-                } else if(this.leituraDados.size() == 500000) {
-                    System.out.println("500.000");
+            } else {
+                if(caracteres[j] == this.ASPAS) {
+                    entreAspas = true;
+                    texto = "";
                 }
-            }  
-            tempoFinal = System.currentTimeMillis();
-            System.out.println("O pre carregamento demorou: " + (tempoFinal - tempoInicial) + " ms\n");
-            leitura.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Erro na leitura do arquivo."); //mensagem de erro caso não seja possivel realizar a leitura do arquivo
+            }
         }
     }
-        
+    
+    /**
+     * Função para converter uma string de numeroes em vetor de int -
+     * @param frase Frase a ser convertida
+     * @return Vetor de inteiros
+     */
+    private int[] converteStringParaVecInt(String frase) {
+        frase = frase.replace("[", ""); //Remove [ da string
+        frase = frase.replace("]", ""); //Remove ] da string
+        if(frase != "") {
+            String[] campos = frase.split(","); //Divide a frase pela vírgula
+            int[] vetor = new int[campos.length];
+            for(int i=0; i<campos.length; i++) {
+                vetor[i] = converterStringParaInt(campos[i].trim());
+            }
+            return vetor;
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Converte string para inteiro se possível. Caso não seja possível, retorna 0 (zero).
+     * @param frase String a ser convertida
+     * @return Inteiro convertido
+     */
+    private int converterStringParaInt(String frase) {
+        try {
+            if(frase != "") {
+                return Integer.parseInt(frase);
+            } else {
+                return 0;
+            }
+        } catch (NumberFormatException e) {
+            //System.out.println("Falha ao converter "+frase+" para int");
+            return 0;
+        }
+    }
+    
+    /**
+     * Converte string para float se possível. Caso não seja possível, retorna 0 (zero).
+     * @param frase String a ser convertida
+     * @return Float convertido
+     */
+    private float converterStringParaFloat(String frase) {
+        try {
+            if(frase != "") {
+                return Float.parseFloat(frase);
+            } else {
+                return 0;
+            }
+        } catch (NumberFormatException e) {
+            //System.out.println("Falha ao converter string para float");
+            return 0;
+        }
+    }
+    
+    /**
+     * Converte string para long se possível. Caso não seja possível, retorna 0 (zero).
+     * @param frase String a ser convertida
+     * @return Long convertido
+     */
+    private long converterStringParaLong(String frase) {
+        try {
+            if(frase != "") {
+                return Long.parseLong(frase);
+            } else {
+                return 0;
+            }
+        } catch (NumberFormatException e) {
+            //System.out.println("Falha ao converter string para long");
+            return 0;
+        }
+    }
 }

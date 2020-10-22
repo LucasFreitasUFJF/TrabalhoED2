@@ -1,24 +1,19 @@
-package ordenacao;
+package Ordenacao;
 
-import trabalho.Metrica;
-import trabalho.Registro;
+import Trabalho.Metrica;
+import Registros.Livro;
 
 public class MergeSort {
     
-    //Construtor
-    public MergeSort() {
-        
-    }
-    
-    public void ordena(Registro[] vetor){
+    public static void ordena(Livro[] vetor){
         long tempoInicial = System.currentTimeMillis();
-        Registro[] aux = new Registro[vetor.length];
+        Livro[] aux = new Livro[vetor.length];
         mergeSort(vetor, aux, 0, vetor.length - 1);
         long tempoFinal = System.currentTimeMillis();
         Metrica.setTempo(tempoFinal - tempoInicial);
     }
     
-    private void mergeSort(Registro[] vetor, Registro[] aux, int first, int last) {
+    private static void mergeSort(Livro[] vetor, Livro[] aux, int first, int last) {
         if(first < last){
             int mid=(first+last)/2;
             mergeSort(vetor, aux, first, mid);
@@ -27,7 +22,7 @@ public class MergeSort {
         }
     }
 
-    private void merge(Registro[] vetor, Registro[] aux, int first, int mid, int last) {
+    private static void merge(Livro[] vetor, Livro[] aux, int first, int mid, int last) {
         int i1 = first;
         int i2 = mid+1;
         int k = 0;

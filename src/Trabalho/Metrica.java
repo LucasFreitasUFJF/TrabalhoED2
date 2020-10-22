@@ -1,6 +1,6 @@
-package trabalho;
+package Trabalho;
 
-
+//Classe com métodos estáticos para armazenar as métricas das execuções
 public class Metrica {
     private static long comparacoes;
     private static long copias;

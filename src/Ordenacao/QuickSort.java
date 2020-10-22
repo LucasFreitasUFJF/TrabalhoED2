@@ -1,20 +1,20 @@
-package ordenacao;
+package Ordenacao;
 
 import java.util.ArrayList;
 import java.util.Random;
-import trabalho.Metrica;
-import trabalho.Registro;
+import Trabalho.Metrica;
+import Registros.Livro;
 
 public class QuickSort {
     
     //INÍCIO - QUICKSORT RECURSIVO
-    public void ordena_Recursivo(Registro[] vetor){
+    public static void ordena_Recursivo(Livro[] vetor){
         long tempoInicial = System.currentTimeMillis();
         quickSort_Recursivo(0, vetor.length-1, vetor);
         long tempoFinal = System.currentTimeMillis();
         Metrica.setTempo(tempoFinal-tempoInicial);
     }
-    private void  quickSort_Recursivo(int esq, int dir, Registro[] vetor){
+    private static void  quickSort_Recursivo(int esq, int dir, Livro[] vetor){
         if(esq < dir){
             int pivo = particiona(esq, dir, vetor, vetor[esq]);
             quickSort_Recursivo(esq, pivo-1, vetor);
@@ -24,25 +24,25 @@ public class QuickSort {
     //FINAL - QUICKSORT RECURSIVO
     
     //INÍCIO - QUICKSORT MEDIANA
-    public void ordena_Mediana(Registro[] vetor, int k) {
+    public static void ordena_Mediana(Livro[] vetor, int k) {
         long tempoInicial = System.currentTimeMillis();
         quickSort_Mediana(0, vetor.length-1, vetor, k);
         long tempoFinal = System.currentTimeMillis();
         Metrica.setTempo(tempoFinal-tempoInicial);
     }
-    private void quickSort_Mediana(int esq, int dir, Registro[] vetor, int k) {
+    private static void quickSort_Mediana(int esq, int dir, Livro[] vetor, int k) {
         if(esq < dir) {
             int pivo = escolhePivo_Mediana(esq, dir, vetor, k);
             quickSort_Mediana(esq, pivo-1, vetor, k);
             quickSort_Mediana(pivo+1, dir, vetor, k);
         }
     }
-    private int escolhePivo_Mediana(int esq, int dir, Registro[] vetor, int k) {
+    private static int escolhePivo_Mediana(int esq, int dir, Livro[] vetor, int k) {
         //Escolha do pivo através da mediana de k elementos aleatórios
-        Registro pivo;
+        Livro pivo;
         if((dir-esq) > k) {
             Random random = new Random(System.currentTimeMillis());
-            Registro[] auxPivo = new Registro[k];
+            Livro[] auxPivo = new Livro[k];
             ArrayList<Integer> numAleatorios = new ArrayList();
             boolean existe;
             int aleatorio;
@@ -60,7 +60,7 @@ public class QuickSort {
                     n++;
                 }
             }
-            Registro[] possiveisPivos = new Registro[k];
+            Livro[] possiveisPivos = new Livro[k];
             for(int m=0; m<k; m++) {
                 possiveisPivos[m] = vetor[numAleatorios.get(m)];
             }
@@ -75,16 +75,16 @@ public class QuickSort {
     //FINAL - QUICKSORT MEDIANA
     
     //INÍCIO - QUICKSORT INSERÇÃO
-    public void ordena_Insercao(Registro[] vetor, int m) {
+    public static void ordena_Insercao(Livro[] vetor, int m) {
         long tempoInicial = System.currentTimeMillis();
         quickSort_Insercao(0, vetor.length-1, vetor, m);
         long tempoFinal = System.currentTimeMillis();
         Metrica.setTempo(tempoFinal-tempoInicial);
     }
-    private void quickSort_Insercao(int esq, int dir, Registro[] vetor, int m) {
+    private static void quickSort_Insercao(int esq, int dir, Livro[] vetor, int m) {
         if (esq < dir){
             if ((dir - esq) <= m) {
-                this.insertionSort(esq, dir+1, vetor);
+                insertionSort(esq, dir+1, vetor);
             }
             else {
                 int pivo = particiona(esq, dir, vetor, vetor[esq]);
@@ -93,9 +93,9 @@ public class QuickSort {
             }
         }
     }
-    private void insertionSort(int esq, int dir, Registro[] vetor) {
+    private static void insertionSort(int esq, int dir, Livro[] vetor) {
         for (int i = esq + 1; i < dir; i++) {
-            Registro pivo = vetor[i];
+            Livro pivo = vetor[i];
             Metrica.incrementaCopias();
             int j = i-1;
             while (j>=0 && ((vetor[j].getTitle().compareToIgnoreCase(pivo.getTitle()) > 0) && Metrica.incrementaComparacoes())) {
@@ -108,7 +108,7 @@ public class QuickSort {
     //FINAL - QUICKSORT INSERÇÃO
     
     //Início - Funções de uso comum
-    private int particiona(int esq, int dir, Registro[] vetor, Registro pivo){
+    private static int particiona(int esq, int dir, Livro[] vetor, Livro pivo){
         int i = (esq);
         int j = dir;
         while (i <= j){
@@ -129,8 +129,8 @@ public class QuickSort {
         return j;
     }
 
-    private void troca(int i, int j, Registro[] vetor) {
-        Registro temp = vetor[i];
+    private static void troca(int i, int j, Livro[] vetor) {
+        Livro temp = vetor[i];
         Metrica.incrementaCopias();//Copia feita na linha anterior
         vetor[i] = vetor[j];
         vetor[j] = temp;

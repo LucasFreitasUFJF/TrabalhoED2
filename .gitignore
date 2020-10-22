@@ -1,11 +1,16 @@
-/build/
-authors.csv
-categories.csv
-dataset1.csv
-dataset.csv
-dataset_simp_sem_descricao.csv
-dataset.txt
-formats.csv
-places.csv
+# Created by https://www.toptal.com/developers/gitignore/api/netbeans
+# Edit at https://www.toptal.com/developers/gitignore?templates=netbeans
 
-/dist/
+### NetBeans ###
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+*.csv
+
+# End of https://www.toptal.com/developers/gitignore/api/netbeans

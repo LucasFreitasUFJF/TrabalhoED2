@@ -1,23 +1,18 @@
-package ordenacao;
+package Ordenacao;
 
-import trabalho.Metrica;
-import trabalho.Registro;
+import Trabalho.Metrica;
+import Registros.Livro;
 
 public class HeapSort {
     
-    //Construtor
-    public HeapSort() {
-        
-    }
-    
-    public void ordena(Registro[] vetor) {
+    public static void ordena(Livro[] vetor) {
         long tempoInicial = System.currentTimeMillis();
         heapSort(vetor, vetor.length);
         long tempoFinal = System.currentTimeMillis();
         Metrica.setTempo(tempoFinal-tempoInicial);
     }
     
-    private void heapSort(Registro[] vetor, int n) {
+    private static void heapSort(Livro[] vetor, int n) {
         buildMaxHeap(vetor, n);
         for(int i=n-1; i>0; i--) {
             trocar(0, i, vetor);
@@ -25,13 +20,13 @@ public class HeapSort {
         }
     }
     
-    private void buildMaxHeap(Registro[] vetor, int n) {
+    private static void buildMaxHeap(Livro[] vetor, int n) {
         for(int i=n/2 - 1; i>=0; i--) {
             maxHeapify(vetor, i, n);
         }
     }
     
-    private void maxHeapify(Registro[] vetor, int i, int n) {
+    private static void maxHeapify(Livro[] vetor, int i, int n) {
         int m = i; 
         int l = 2*i + 1; // left 
         int r = 2*i + 2; // right
@@ -50,8 +45,8 @@ public class HeapSort {
         } 
     }
     
-    private void trocar(int i, int j, Registro[] vetor) {
-        Registro tmp = vetor[i];
+    private static void trocar(int i, int j, Livro[] vetor) {
+        Livro tmp = vetor[i];
         Metrica.incrementaCopias();
         vetor[i] = vetor[j];
         vetor[j] = tmp;
