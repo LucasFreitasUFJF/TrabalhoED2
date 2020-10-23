@@ -4,6 +4,17 @@
 
 </p>
 
+## Descrição do Projeto
+
+  
+
+<p align="justify"> Desenvolvimento do trabalho de Estrutura de Dados 2. </p>
+
+  
+
+> Status do Projeto: Em Desenvolvimento.
+
+
 ### Tópicos
 
   
