@@ -38,7 +38,7 @@
 ```bash
 $ git clone https://github.com/LucasFreitasUFJF/TrabalhoED2
 ```
-**3.** É necessário o download do dataset encontrado no link https://drive.google.com/file/d/1Wg6pAx5sjdSS8M-9UNIEQPQiy_dS4Fzb/view?usp=sharing, após o download, extraia e coloque o arquivo "dataset_simp_sem_descricao.csv" na pasta de Entradas.
+**3.** É necessário o download do dataset encontrado no link https://drive.google.com/open?id=18wSfmVITbEEZ26lkFNEm5bRqgNvlw9o0&authuser=4, após o download, extraia e coloque o arquivo "dataset_simp_sem_descricao.csv" na pasta de Entradas.
 
 **4.** É possivel executar usando uma IDE, como NetBeans, basta abrir a pasta como projeto.
 
