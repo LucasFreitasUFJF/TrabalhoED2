@@ -29,7 +29,9 @@ $ git clone https://github.com/LucasFreitasUFJF/TrabalhoED2
 ```
 **3.** É necessário o download do dataset encontrado no link https://drive.google.com/file/d/1Wg6pAx5sjdSS8M-9UNIEQPQiy_dS4Fzb/view?usp=sharing, após o download, extraia e coloque o arquivo "dataset_simp_sem_descricao.csv" na pasta de Entradas.
 
-**4.** Para executar por linha de comando abre o terminal e digite:
+**4.** É possivel executar usando uma IDE, como NetBeans, basta abrir a pasta como projeto.
+
+**5.** Para executar por linha de comando abre o terminal e digite:
 
 ```bash
 $ java -jar TrabalhoED2.jar
