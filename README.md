@@ -83,5 +83,5 @@ Executa as ordenações 5 vezes para cada N.
 | HeapSort       | Implementação da ordenação do tipo Heap Sort                                  |
 | InsertionSort  | Implementação da ordenação do tipo Insertion Sort                             |
 | MergeSort      | Implementação da ordenação do tipo Merge Sort                                 |
-| ShellSort       | Implementação da ordenação do tipo Tree Sort                                  |
+| ShellSort       | Implementação da ordenação do tipo Meu Sort                                  |
 | QuickSort      | Implementação dos tipos de ordenação Quick Sort: Recursivo, Mediana, Inserção |
