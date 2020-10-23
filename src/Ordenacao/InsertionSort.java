@@ -19,9 +19,11 @@ public class InsertionSort {
             int j= i-1;
             while (j>=0 && ((vetor[j].getTitle().compareToIgnoreCase(pivo.getTitle()) > 0) && Metrica.incrementaComparacoes())) {
                 vetor[j+1] = vetor[j];
+                Metrica.incrementaCopias();
                 j--;
             }
             vetor[j+1] = pivo;
+            Metrica.incrementaCopias();
         }
     }
 }

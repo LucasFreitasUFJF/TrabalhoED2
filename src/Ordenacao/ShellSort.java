@@ -27,9 +27,11 @@ public class ShellSort {
                 j = i;
                 while (Metrica.incrementaComparacoes() && j > h - 1 && valor.getTitle().compareToIgnoreCase(vetor[j - h].getTitle()) <= 0) {
                     vetor[j] = vetor[j - h];
+                    Metrica.incrementaCopias();
                     j = j - h;
                 }
                 vetor[j] = valor;
+                Metrica.incrementaCopias();
             }
             h = h / 3;
         }
