@@ -60,11 +60,13 @@ public class HashAutor {
 
     public void imprime() {
         for (int i = 0; i < n; i++) {
+            if(data[i]!=null){
             System.out.print("Altura " + i + ":");
             for (NoAutor autor : data[i]) {
                 System.out.print(autor.getChave() + ", ");
             }
             System.out.println("");
+        }
         }
     }
 }

@@ -1,5 +1,7 @@
 package Trabalho;
 
+import Hash.HashAutor;
+import Hash.HashLivro;
 import Registros.Livro;
 import LeituraEscrita.Leitura;
 import LeituraEscrita.Escrita;
@@ -10,6 +12,7 @@ import Ordenacao.InsertionSort;
 import Ordenacao.MergeSort;
 import Ordenacao.QuickSort;
 import Ordenacao.ShellSort;
+import Registros.Autor;
 
 public class OpcoesMenu {
     private final Dados dados;
@@ -134,12 +137,39 @@ public class OpcoesMenu {
         ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 2.txt");
         if(parametrosN != null) {
             Livro[] livros;
+            Autor[] autores=dados.getAutores();
+            HashLivro hashLivro=new HashLivro(50);
+            HashAutor hashAutor=new HashAutor(50);
             for(int i=0; i<parametrosN.size(); i++) {
                 livros = dados.getNLivros(parametrosN.get(i));
+                for(Livro livro : livros){
+                    hashLivro.insere(livro);
+                    for(long id : livro.getAuthors()){
+                        for(Autor autor : autores){
+                            if(id == autor.getId()){
+                                hashAutor.insere(autor);
+                                break;
+                            }
+                        }
+                    }
+                }
             }
+            hashLivro.imprime();
+            System.out.println(" ");
+            hashAutor.imprime();
         }
     }
     //FINAL - PARTE 2
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     private void print(Livro[] livros) {
         for (Livro livro : livros) {

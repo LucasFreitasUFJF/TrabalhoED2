@@ -58,11 +58,13 @@ public class HashLivro {
 
     public void imprime() {
         for (int i = 0; i < n; i++) {
+            if(data[i]!=null){
             System.out.print("Altura " + i + ":");
             for (NoLivro livro : data[i]) {
                 System.out.print(livro.getChave() + ", ");
             }
             System.out.println("");
         }
+        }  
     }
 }
