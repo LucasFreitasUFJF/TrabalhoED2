@@ -30,9 +30,9 @@ public class Dados {
     public void preCarregarArquivos() throws IOException {
         System.out.println("Pré-carregando livros em memória!");
         livros = leitura.lerLivros();
-        /*System.out.println("Pré-carregando autores em memória!");
+        System.out.println("Pré-carregando autores em memória!");
         autores = leitura.lerAutores();
-        System.out.println("Pré-carregando categorias em memória!");
+        /*System.out.println("Pré-carregando categorias em memória!");
         categorias = leitura.lerCategorias();*/
     }
     
