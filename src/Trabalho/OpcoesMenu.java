@@ -129,6 +129,18 @@ public class OpcoesMenu {
     }
     //FINAL - PARTE 1
     
+    //INÍCIO - PARTE 2
+    public void executarParte2() throws IOException {
+        ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 2.txt");
+        if(parametrosN != null) {
+            Livro[] livros;
+            for(int i=0; i<parametrosN.size(); i++) {
+                livros = dados.getNLivros(parametrosN.get(i));
+            }
+        }
+    }
+    //FINAL - PARTE 2
+    
     private void print(Livro[] livros) {
         for (Livro livro : livros) {
             livro.print();

@@ -5,12 +5,12 @@ import Registros.Autor;
 public class NoAutor {
 
     private long chave;
-    private Autor valor;
+    private String nomeAutor;
     private int cont;
 
-    public NoAutor(long key, Autor value) {
+    public NoAutor(long key, Autor autor) {
         this.chave = key;
-        this.valor = value;
+        this.nomeAutor = autor.getName();
         this.cont = 0;
     }
 
@@ -22,12 +22,12 @@ public class NoAutor {
         this.chave = chave;
     }
 
-    public Autor getValor() {
-        return valor;
+    public String getNomeAutor() {
+        return nomeAutor;
     }
 
-    public void setValor(Autor valor) {
-        this.valor = valor;
+    public void setNomeAutor(String nomeAutor) {
+        this.nomeAutor = nomeAutor;
     }
 
     public int getCont() {
