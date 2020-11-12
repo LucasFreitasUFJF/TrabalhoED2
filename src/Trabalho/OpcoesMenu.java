@@ -136,12 +136,12 @@ public class OpcoesMenu {
     public void executarParte2() throws IOException {
         ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 2.txt");
         if(parametrosN != null) {
-            Livro[] livros;
+            Livro[] livros=dados.getLivros();
             Autor[] autores=dados.getAutores();
-            HashLivro hashLivro=new HashLivro(50);
-            HashAutor hashAutor=new HashAutor(50);
+            HashLivro hashLivro=new HashLivro(100000);
+            HashAutor hashAutor=new HashAutor(60000,10);
             for(int i=0; i<parametrosN.size(); i++) {
-                livros = dados.getNLivros(parametrosN.get(i));
+            //    livros = dados.getNLivros(parametrosN.get(i));
                 for(Livro livro : livros){
                     hashLivro.insere(livro);
                     for(long id : livro.getAuthors()){
@@ -154,9 +154,10 @@ public class OpcoesMenu {
                     }
                 }
             }
-            hashLivro.imprime();
-            System.out.println(" ");
-            hashAutor.imprime();
+            hashAutor.imprimeMaisFreq();
+            //hashLivro.imprime();
+            //System.out.println(" ");
+            //hashAutor.imprime();
         }
     }
     //FINAL - PARTE 2

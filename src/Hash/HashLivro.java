@@ -61,10 +61,10 @@ public class HashLivro {
             if(data[i]!=null){
             System.out.print("Altura " + i + ":");
             for (NoLivro livro : data[i]) {
-                System.out.print(livro.getChave() + ", ");
+                System.out.print(livro.getValor().getTitle()+ ", ");
             }
             System.out.println("");
-        }
+          }
         }  
     }
 }
