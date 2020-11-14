@@ -1,5 +1,6 @@
 package Trabalho;
 
+import Arvore.ArvoreVP;
 import Hash.HashAutor;
 import Hash.HashLivro;
 import Registros.Livro;
@@ -162,7 +163,17 @@ public class OpcoesMenu {
     }
     //FINAL - PARTE 2
     
-    
+    //INÍCIO - PARTE 3
+    public void executarParte3() throws IOException {
+        ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 3.txt");
+        Livro[] livros = dados.getNLivros(10);
+        ArvoreVP avp = new ArvoreVP();
+        for(Livro livro : livros) {
+            avp.insere(livro);
+        }
+        avp.print();
+    }
+    //FINAL - PARTE 3
     
     
     

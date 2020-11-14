@@ -23,7 +23,7 @@ public class Main {
                         break;
                 case 2: opcoesMenu.executarParte2();
                         break;
-                case 3: System.out.println("Parte 3 ainda não implementada");
+                case 3: opcoesMenu.executarParte3();
                         break;
                 case 0: opcoesMenu.closeEscrita();
                         break;
