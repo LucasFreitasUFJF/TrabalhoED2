@@ -166,7 +166,7 @@ public class OpcoesMenu {
     //INÍCIO - PARTE 3
     public void executarParte3() throws IOException {
         ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 3.txt");
-        Livro[] livros = dados.getNLivros(10);
+        Livro[] livros = dados.getNLivros(7);
         ArvoreVP avp = new ArvoreVP();
         for(Livro livro : livros) {
             avp.insere(livro);
