@@ -3,6 +3,7 @@ package Trabalho;
 import Arvore.ArvoreVP;
 import Hash.HashAutor;
 import Hash.HashLivro;
+import Hash.NoAutor;
 import Registros.Livro;
 import LeituraEscrita.Leitura;
 import LeituraEscrita.Escrita;
@@ -14,6 +15,7 @@ import Ordenacao.MergeSort;
 import Ordenacao.QuickSort;
 import Ordenacao.ShellSort;
 import Registros.Autor;
+import java.util.Scanner;
 
 public class OpcoesMenu {
     private final Dados dados;
@@ -136,11 +138,18 @@ public class OpcoesMenu {
     //INÍCIO - PARTE 2
     public void executarParte2() throws IOException {
         ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 2.txt");
-        if(parametrosN != null) {
-            Livro[] livros=dados.getLivros();
-            Autor[] autores=dados.getAutores();
+        Scanner teclado = new Scanner(System.in);
+        int M;
+        
+        if(parametrosN != null && parametrosN.size() > 0) {
+            Livro[] livros = dados.getNLivros(parametrosN.get(0));
+            Autor[] autores = dados.getAutores();
+            
+            System.out.println("Digite o valor de M: ");
+            M = teclado.nextInt();
+            
             HashLivro hashLivro=new HashLivro(100000);
-            HashAutor hashAutor=new HashAutor(60000,10);
+            HashAutor hashAutor=new HashAutor(60000, M);
             for(int i=0; i<parametrosN.size(); i++) {
             //    livros = dados.getNLivros(parametrosN.get(i));
                 for(Livro livro : livros){
@@ -166,7 +175,7 @@ public class OpcoesMenu {
     //INÍCIO - PARTE 3
     public void executarParte3() throws IOException {
         ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 3.txt");
-        Livro[] livros = dados.getNLivros(7);
+        Livro[] livros = dados.getNLivros(10);
         ArvoreVP avp = new ArvoreVP();
         for(Livro livro : livros) {
             avp.insere(livro);
@@ -181,7 +190,13 @@ public class OpcoesMenu {
     
     
     
-    
+     /*public void test() {
+        Livro[] livros = dados.getNLivros(10);
+        MergeSort.ordena(livros);
+        for(Livro livro : livros) {
+            System.out.println(livro.getTitle());
+        }
+    }*/
     
     private void print(Livro[] livros) {
         for (Livro livro : livros) {

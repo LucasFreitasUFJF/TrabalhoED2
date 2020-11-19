@@ -20,9 +20,9 @@ public class ArvoreB {
             raiz = no;
             System.out.println(livro.getId() / 10000000);
         } else {
-            if (buscar(livro) == null) {
+            /*if (buscar(livro) == null) {
                 auxInsere(null, raiz, livro);
-            }
+            }*/
         }
     }
 

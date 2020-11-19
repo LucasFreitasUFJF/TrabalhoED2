@@ -1,5 +1,6 @@
 package Hash;
 
+import Ordenacao.MergeSort;
 import Registros.Autor;
 import java.util.ArrayList;
 
@@ -102,7 +103,9 @@ public class HashAutor {
     }
 
     public void imprimeMaisFreq() {
-        for (int i = 0; i < freq.size(); i++) {
+        NoAutor[] autores = freq.toArray(new NoAutor[freq.size()]);
+        MergeSort.ordena(autores);
+        for (int i = (freq.size()-1); i >= 0; i--) {
             System.out.println(freq.get(i).getCont()+" "+freq.get(i).getNomeAutor());
         }
     }

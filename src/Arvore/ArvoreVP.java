@@ -51,6 +51,7 @@ public class ArvoreVP {
                 else 
                     pai.setDir(no);
             }
+            //atualizarSubArvore(pai, no);
         } else if(livro.getId() < no.getLivro().getId()) {
             auxInsere(no, no.getEsq(), livro);
         } else {
@@ -65,22 +66,21 @@ public class ArvoreVP {
         if(pai.getPai() != null) { //Avô != null
             if(pai.getLivro().getId() < pai.getPai().getLivro().getId()) { //Pai a esquerda do avô
                 if(pai.getCor() && (pai.getPai().getDir() != null && pai.getPai().getDir().getCor())) { //Pai e tio vermelho
-                    recolore(pai.getPai(), !pai.getCor());
-                    if(raiz == pai.getPai()) //Se o pai é raiz
-                        raiz.setCor(false);
+                    recolore(pai.getPai(), !pai.getPai().getCor());
+                    raiz.setCor(false);
                 } else if(pai.getCor() && (pai.getPai().getDir() == null || !pai.getPai().getDir().getCor())) { //Pai vermelho e tio preto
                     if(no.getLivro().getId() < pai.getLivro().getId()) { //Nó atual está a esquerda do pai
                         //RotSimplesDir
                         rotacaoSimplesDir(pai.getPai()); //Esq, Esq
+                        recolore(pai, !pai.getCor());
                     } else { //Nó atual está a direita do pai
                         //RotDuplaDir
                         NoVP aux = pai.getPai();
                         rotacaoSimplesEsq(pai); //Dir, Esq
                         rotacaoSimplesDir(aux);
+                        recolore(no, !no.getCor());
                     }
-                    recolore(pai, !pai.getCor());
-                    if(raiz == pai) //Se o pai é raiz
-                        raiz.setCor(false);
+                    raiz.setCor(false);
                     //Rotação
                     /*
                     Se rot simples = recolore pai e avo
@@ -89,22 +89,21 @@ public class ArvoreVP {
                 }
             } else { //Pai a direita do avô
                 if(pai.getCor() && (pai.getPai().getEsq() != null && pai.getPai().getEsq().getCor())) { //Pai e tio vermelho
-                    recolore(pai.getPai(), true);
-                    if(raiz == pai.getPai()) //Se o pai é raiz
-                        raiz.setCor(false);
+                    recolore(pai.getPai(), !pai.getPai().getCor());
+                    raiz.setCor(false);
                 } else if(pai.getCor() && (pai.getPai().getEsq() == null || !pai.getPai().getEsq().getCor())) { //Pai vermelho e tio preto
                     if(no.getLivro().getId() < pai.getLivro().getId()) { //Nó atual está a esquerda do pai
                         //RotDuplaEsq
                         NoVP aux = pai.getPai();
                         rotacaoSimplesDir(pai);
                         rotacaoSimplesEsq(aux);
+                        recolore(no, !no.getCor());
                     } else { //Nó atual está a direita do pai
                         //RotSimplesEsq
                         rotacaoSimplesEsq(pai.getPai());
+                        recolore(pai, !pai.getCor());
                     }
-                    recolore(pai, !pai.getCor());
-                    if(raiz == pai) //Se o pai é raiz
-                        raiz.setCor(false);
+                    raiz.setCor(false);
                     //Rotação
                     /*
                     Se rot simples = recolore pai e avo
