@@ -29,6 +29,7 @@ public class Main {
                         break;
                         
                 default: System.out.println("Opção inválida!");
+                        break;
             }
         }
     }  

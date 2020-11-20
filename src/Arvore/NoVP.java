@@ -1,28 +1,27 @@
 package Arvore;
 
-import Registros.Livro;
 
 public class NoVP {
-    private Livro livro;
+    private long chave;
     private boolean cor; //false = preto e true = vermelho
     private NoVP esq;
     private NoVP dir;
     private NoVP pai;
     
-    public NoVP(Livro livro) {
-        this.livro = livro;
+    public NoVP(long chave) {
+        this.chave = chave;
         this.cor = true;
         this.esq = null;
         this.dir = null;
         this.pai = null;
     }
 
-    public Livro getLivro() {
-        return livro;
+    public long getChave() {
+        return chave;
     }
 
-    public void setId(Livro livro) {
-        this.livro = livro;
+    public void setChave(long chave) {
+        this.chave = chave;
     }
 
     public boolean getCor() {

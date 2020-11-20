@@ -8,7 +8,11 @@ public class MergeSort {
     
     public static <T> void ordena(T[] vetor){
         long tempoInicial = System.currentTimeMillis();
-        T[] aux = (T[]) new Object[vetor.length];
+        T[] aux;
+        if(vetor[0].getClass() == Livro.class) {
+            aux = (T[]) new Livro[vetor.length];
+        } else
+            aux = (T[]) new NoAutor[vetor.length];
         
         mergeSort(vetor, aux, 0, vetor.length - 1);
         long tempoFinal = System.currentTimeMillis();
@@ -39,7 +43,7 @@ public class MergeSort {
                 Metrica.incrementaCopias();
                 i2++;
             }
-            k++;
+            k = k+1;
         }
         while(i1 <= mid) { aux[k] = vetor[i1]; Metrica.incrementaCopias(); i1++; k++; }
         while(i2 <= last) { aux[k] = vetor[i2]; Metrica.incrementaCopias(); i2++; k++; }
@@ -52,11 +56,12 @@ public class MergeSort {
         if(i.getClass() == Livro.class) {
             return ((Livro) i).getTitle().compareToIgnoreCase(((Livro) j).getTitle()) <= 0;
         } else {
-            if(((NoAutor) i).getCont() < ((NoAutor) j).getCont()) {
+            return Integer.toString(((NoAutor) i).getCont()).compareToIgnoreCase(Integer.toString(((NoAutor) j).getCont())) <= 0;
+            /*if(((NoAutor) i).getCont() < ((NoAutor) j).getCont()) {
                 return true;
             } else {
                 return false;
-            }
+            }*/
         }
     }
 }

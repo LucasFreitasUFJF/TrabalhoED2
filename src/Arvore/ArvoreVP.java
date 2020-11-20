@@ -15,9 +15,9 @@ public class ArvoreVP {
     
     private NoVP auxBuscar(NoVP no, Livro livro) {
         if(no != null) {
-            if(livro.getId() < no.getLivro().getId()) {
+            if(livro.getId() < no.getChave()) {
                 return auxBuscar(no.getEsq(), livro);
-            } else if(livro.getId() > no.getLivro().getId()) {
+            } else if(livro.getId() > no.getChave()) {
                 return auxBuscar(no.getDir(), livro);
             } else {
                 return no;
@@ -28,90 +28,121 @@ public class ArvoreVP {
     }
     
     public void insere(Livro livro) {
-        if(raiz == null) {
-            NoVP no = new NoVP(livro);
-            raiz = no;
-            raiz.setCor(false);
-            System.out.println(livro.getId()/10000000);
-        } else {
-            if(buscar(livro) == null) {
-                auxInsere(null, raiz, livro);
-            }
+        if(buscar(livro) == null) {
+            auxInsere(null, raiz, livro);
         }
+        raiz.setCor(false);
     }
     
     private void auxInsere(NoVP pai, NoVP no, Livro livro) {
         if(no == null) {
-            no = new NoVP(livro);
+            no = new NoVP(livro.getId());
             System.out.println(livro.getId()/10000000);
             no.setPai(pai);
             if(pai != null) {
-                if(livro.getId() < pai.getLivro().getId())
+                if(livro.getId() < pai.getChave())
                     pai.setEsq(no);
                 else 
                     pai.setDir(no);
+                
+                if(no.getPai().getPai() == null)
+                    return;
+            } else {
+                raiz = no;
+                no.setCor(false);
+                return;
             }
-            //atualizarSubArvore(pai, no);
-        } else if(livro.getId() < no.getLivro().getId()) {
+            atualizarInsercao(no);
+        } else if(livro.getId() < no.getChave()) {
             auxInsere(no, no.getEsq(), livro);
         } else {
             auxInsere(no, no.getDir(), livro);
         }
-        
-        if(pai != null)
-            atualizarSubArvore(pai, no);
     }
     
-    private void atualizarSubArvore(NoVP pai, NoVP no) {
-        if(pai.getPai() != null) { //Avô != null
-            if(pai.getLivro().getId() < pai.getPai().getLivro().getId()) { //Pai a esquerda do avô
-                if(pai.getCor() && (pai.getPai().getDir() != null && pai.getPai().getDir().getCor())) { //Pai e tio vermelho
-                    recolore(pai.getPai(), !pai.getPai().getCor());
-                    raiz.setCor(false);
-                } else if(pai.getCor() && (pai.getPai().getDir() == null || !pai.getPai().getDir().getCor())) { //Pai vermelho e tio preto
-                    if(no.getLivro().getId() < pai.getLivro().getId()) { //Nó atual está a esquerda do pai
-                        //RotSimplesDir
-                        rotacaoSimplesDir(pai.getPai()); //Esq, Esq
-                        recolore(pai, !pai.getCor());
-                    } else { //Nó atual está a direita do pai
-                        //RotDuplaDir
-                        NoVP aux = pai.getPai();
-                        rotacaoSimplesEsq(pai); //Dir, Esq
-                        rotacaoSimplesDir(aux);
-                        recolore(no, !no.getCor());
+    private void atualizarInsercao(NoVP no) {
+        if(no.getPai() != null && no.getPai().getPai()!= null && no.getPai().getCor()) {
+            if (no.getPai() == no.getPai().getPai().getDir()) { // Pai está a direita do avô
+                if (no.getPai().getPai().getEsq() != null && no.getPai().getPai().getEsq().getCor()) { //Pai e tio vermelho
+                    no.getPai().getPai().getEsq().setCor(false); // Tio = preto
+                    no.getPai().setCor(false); // Pai = preto
+                    no.getPai().getPai().setCor(true); // Avô = vermelho
+                    atualizarInsercao(no.getPai().getPai());
+                } else { // Pai vermelho e tio preto
+                    if (no == no.getPai().getEsq()) { // Filho a esquerda do pai
+                        no = no.getPai(); // No = Pai
+                        rotacaoSimplesDir(no);
                     }
-                    raiz.setCor(false);
-                    //Rotação
-                    /*
-                    Se rot simples = recolore pai e avo
-                    se rot dupla = recolore no e avo
-                    */
+                    no.getPai().setCor(false); // Pai = preto
+                    no.getPai().getPai().setCor(true); // Avô = vermelho
+                    rotacaoSimplesEsq(no.getPai().getPai());
+                    atualizarInsercao(no);
                 }
-            } else { //Pai a direita do avô
-                if(pai.getCor() && (pai.getPai().getEsq() != null && pai.getPai().getEsq().getCor())) { //Pai e tio vermelho
-                    recolore(pai.getPai(), !pai.getPai().getCor());
-                    raiz.setCor(false);
-                } else if(pai.getCor() && (pai.getPai().getEsq() == null || !pai.getPai().getEsq().getCor())) { //Pai vermelho e tio preto
-                    if(no.getLivro().getId() < pai.getLivro().getId()) { //Nó atual está a esquerda do pai
-                        //RotDuplaEsq
-                        NoVP aux = pai.getPai();
-                        rotacaoSimplesDir(pai);
-                        rotacaoSimplesEsq(aux);
-                        recolore(no, !no.getCor());
-                    } else { //Nó atual está a direita do pai
-                        //RotSimplesEsq
-                        rotacaoSimplesEsq(pai.getPai());
-                        recolore(pai, !pai.getCor());
+            } else { // Pai está a esquerda do avô
+                if (no.getPai().getPai().getDir() != null && no.getPai().getPai().getDir().getCor()) { // Pai e tio vermelho
+                    no.getPai().getPai().getDir().setCor(false); // Tio = Preto
+                    no.getPai().setCor(false); // Pai = preto
+                    no.getPai().getPai().setCor(true); // Avo = vermelho
+                    atualizarInsercao(no.getPai().getPai());
+                } else { // Pai vermelho e tio preto
+                    if (no == no.getPai().getDir()) { // Filho a direita do pai
+                        no = no.getPai(); // No = pai
+                        rotacaoSimplesEsq(no);
                     }
-                    raiz.setCor(false);
-                    //Rotação
-                    /*
-                    Se rot simples = recolore pai e avo
-                    se rot dupla = recolore no e avo
-                    */
+                    no.getPai().setCor(false); // Pai = preto
+                    no.getPai().getPai().setCor(true); // Avô = vermelho
+                    rotacaoSimplesDir(no.getPai().getPai());
+                    atualizarInsercao(no);
                 }
             }
         }
+    }
+    
+    public void remove(Livro livro) {
+        if(buscar(livro) != null) {
+            auxRemover(raiz, livro);
+        }
+    }
+    
+    private void auxRemover(NoVP no, Livro livro) {
+        if(no == null)
+            return;
+        else if(no.getChave() == livro.getId()) {
+            if(no.getEsq() != null && no.getDir() != null) { // Dois filhos
+                NoVP aux = no.getEsq();
+                while(aux.getDir() != null)
+                    aux = aux.getDir();
+                no.setChave(aux.getChave());
+                aux.setChave(livro.getId());
+                auxRemover(no.getEsq(), livro);
+            } else if(no.getEsq() == null && no.getDir() == null) {
+                if(no == no.getPai().getEsq())
+                    no.getPai().setEsq(null);
+                else
+                    no.getPai().setDir(null);
+                no = null;
+            } else {
+                NoVP aux;
+                if(no.getDir() != null)
+                    aux = no.getDir();
+                else
+                    aux = no.getEsq();
+                
+                if(no == no.getPai().getEsq())
+                    no.getPai().setEsq(aux);
+                else
+                    no.getPai().setDir(aux);
+                aux.setPai(no.getPai());
+                no = null;
+            }
+        } else if(livro.getId() < no.getChave())
+            auxRemover(no.getEsq(), livro);
+        else
+            auxRemover(no.getDir(), livro);
+    }
+    
+    private void atualizaRemocao(NoVP x) {
+        
     }
     
     private void rotacaoSimplesEsq(NoVP p) {
@@ -121,7 +152,7 @@ public class ArvoreVP {
             p.getDir().setPai(p);
         q.setEsq(p);
         if(p.getPai() != null) {
-            if(p.getLivro().getId() < p.getPai().getLivro().getId())
+            if(p.getChave() < p.getPai().getChave())
                 p.getPai().setEsq(q);
             else
                 p.getPai().setDir(q);
@@ -140,7 +171,7 @@ public class ArvoreVP {
             p.getEsq().setPai(p);
         q.setDir(p);
         if(p.getPai() != null) {
-            if(p.getLivro().getId() < p.getPai().getLivro().getId())
+            if(p.getChave() < p.getPai().getChave())
                 p.getPai().setEsq(q);
             else
                 p.getPai().setDir(q);
@@ -150,14 +181,6 @@ public class ArvoreVP {
             q.setPai(null);
         }
         p.setPai(q);
-    }
-    
-    private void recolore(NoVP no, boolean cor) {
-        if(no != null) {
-            no.setCor(cor);
-            recolore(no.getEsq(), !cor);
-            recolore(no.getDir(), !cor);
-        }
     }
     
     public void print() {
