@@ -20,7 +20,7 @@ public class MergeSort {
     }
     
     private static <T> void mergeSort(T[] vetor, T[] aux, int first, int last) {
-        if(first < last){
+        if(vetor != null && first < last && first >= 0 && last < vetor.length && vetor.length != 0){
             int mid=(first+last)/2;
             mergeSort(vetor, aux, first, mid);
             mergeSort(vetor, aux, mid+1, last);
@@ -29,39 +29,39 @@ public class MergeSort {
     }
 
     private static <T> void merge(T[] vetor, T[] aux, int first, int mid, int last) {
+        for (int i = first; i <= last; i++) {
+            aux[i] = vetor[i];
+        }
+        
         int i1 = first;
         int i2 = mid+1;
-        int k = 0;
+        int k = first;
         
         while((i1 <= mid) && (i2 <=last)) {
-            if(compare(vetor[i1], vetor[i2]) && Metrica.incrementaComparacoes()) {
-                aux[k] = vetor[i1];
+            if(compare(aux[i1], aux[i2]) && Metrica.incrementaComparacoes()) {
+                vetor[k] = aux[i1];
                 Metrica.incrementaCopias();
                 i1++;
             } else {
-                aux[k] = vetor[i2];
+                vetor[k] = aux[i2];
                 Metrica.incrementaCopias();
                 i2++;
             }
-            k = k+1;
+            k++;
         }
-        while(i1 <= mid) { aux[k] = vetor[i1]; Metrica.incrementaCopias(); i1++; k++; }
-        while(i2 <= last) { aux[k] = vetor[i2]; Metrica.incrementaCopias(); i2++; k++; }
-        for(int i = first; i<last+1; i++) {
-            vetor[i] = aux[i-first];
-        }
+        while(i1 <= mid) { vetor[k] = aux[i1]; Metrica.incrementaCopias(); i1++; k++; }
+        while(i2 <= last) { vetor[k] = aux[i2]; Metrica.incrementaCopias(); i2++; k++; }
     }
     
     private static <T> boolean compare(T i, T j) {
         if(i.getClass() == Livro.class) {
             return ((Livro) i).getTitle().compareToIgnoreCase(((Livro) j).getTitle()) <= 0;
         } else {
-            return Integer.toString(((NoAutor) i).getCont()).compareToIgnoreCase(Integer.toString(((NoAutor) j).getCont())) <= 0;
-            /*if(((NoAutor) i).getCont() < ((NoAutor) j).getCont()) {
+            if(((NoAutor) i).getCont() < ((NoAutor) j).getCont()) {
                 return true;
             } else {
                 return false;
-            }*/
+            }
         }
     }
 }

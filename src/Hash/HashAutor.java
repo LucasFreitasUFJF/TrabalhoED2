@@ -103,10 +103,11 @@ public class HashAutor {
     }
 
     public void imprimeMaisFreq() {
+        System.out.println("\nAutores mais frequêntes: ");
         NoAutor[] autores = freq.toArray(new NoAutor[freq.size()]);
         MergeSort.ordena(autores);
         for (int i = (freq.size()-1); i >= 0; i--) {
-            System.out.println(freq.get(i).getCont()+" "+freq.get(i).getNomeAutor());
+            System.out.println(autores[i].getCont()+" "+autores[i].getNomeAutor());
         }
     }
 

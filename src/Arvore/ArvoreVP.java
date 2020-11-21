@@ -142,7 +142,71 @@ public class ArvoreVP {
     }
     
     private void atualizaRemocao(NoVP x) {
-        
+        NoVP s;
+        while (x != raiz && !x.getCor()) {
+            if (x == x.getPai().getEsq()) {
+                s = x.getPai().getDir();
+                if (s.getCor()) {
+                    // case 3.1
+                    s.setCor(false);
+                    x.getPai().setCor(true);
+                    rotacaoSimplesEsq(x.getPai());
+                    s = x.getPai().getDir();
+                }
+
+                if (!s.getEsq().getCor() && !s.getDir().getCor()) {
+                    // case 3.2
+                    s.setCor(true);
+                    x = x.getPai();
+                } else {
+                    if (!s.getDir().getCor()) {
+                        // case 3.3
+                        s.getEsq().setCor(false);
+                        s.setCor(true);
+                        rotacaoSimplesDir(s);
+                        s = x.getPai().getDir();
+                    } 
+
+                    // case 3.4
+                    s.setCor(x.getPai().getCor());
+                    x.getPai().setCor(false);
+                    s.getDir().setCor(false);
+                    rotacaoSimplesEsq(x.getPai());
+                    x = raiz;
+                }
+            } else {
+                s = x.getPai().getEsq();
+                if (s.getCor()) {
+                    // case 3.1
+                    s.setCor(false);
+                    x.getPai().setCor(true);
+                    rotacaoSimplesDir(x.getPai());
+                    s = x.getPai().getEsq();
+                }
+
+                if (!s.getEsq().getCor() && !s.getDir().getCor()) {
+                    // case 3.2
+                    s.setCor(true);
+                    x = x.getPai();
+                } else {
+                    if (!s.getEsq().getCor()) {
+                        // case 3.3
+                        s.getDir().setCor(false);
+                        s.setCor(true);
+                        rotacaoSimplesEsq(s);
+                        s = x.getPai().getEsq();
+                    } 
+
+                    // case 3.4
+                    s.setCor(x.getPai().getCor());
+                    x.getPai().setCor(false);
+                    s.getEsq().setCor(false);
+                    rotacaoSimplesDir(x.getPai());
+                    x = raiz;
+                }
+            } 
+        }
+        x.setCor(false);
     }
     
     private void rotacaoSimplesEsq(NoVP p) {
