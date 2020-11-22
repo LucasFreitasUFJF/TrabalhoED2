@@ -27,7 +27,7 @@ public class NoB {
     public int getM() {
         return m;
     }
-    
+
     public long[] getChaves() {
         return chaves;
     }
@@ -39,8 +39,8 @@ public class NoB {
     public NoB[] getFilhos() {
         return filhos;
     }
-    
-    public int getContVal(){
+
+    public int getContVal() {
         return contVal;
     }
 
@@ -52,22 +52,21 @@ public class NoB {
         this.folha = folha;
     }
 
-    public boolean setValor(Livro livro) {
+    public boolean setValor(Livro livro, int indice) {
         if (contVal < m) {
             long auxChaves = livro.getId();
             Livro auxValores = livro;
 
-            for (int i = 0; i < contVal; i++) {
-                if (livro.getId() < chaves[i]) {
-                    long tmpChaves = chaves[i];
-                    Livro tmpVal = valores[i];
+            while (indice <= contVal) {
+                long tmpChaves = chaves[indice];
+                Livro tmpVal = valores[indice];
 
-                    chaves[i] = auxChaves;
-                    valores[i] = auxValores;
+                chaves[indice] = auxChaves;
+                valores[indice] = auxValores;
 
-                    auxChaves = tmpChaves;
-                    auxValores = tmpVal;
-                }
+                auxChaves = tmpChaves;
+                auxValores = tmpVal;
+                indice++;
             }
 
             this.valores[contVal] = livro;
@@ -78,46 +77,38 @@ public class NoB {
             return false;
         }
     }
-    
-    
+
     public void setFilho(NoB filho, int indice) {
-        if (indice < m && indice >=0) {
+        if (indice < m && indice >= 0) {
             filhos[indice] = filho;
             contFilhos++;
         }
     }
 
-    public boolean removeValor(Livro livro) {
-        int index = -1;
-        for (int i = 0; i < contVal; i++) {
-            if (livro == valores[i]) {
-                index = i;
-                break;
+    public boolean removeValor(Livro livro, int indice) {
+        contVal--;
+        if (indice != 0) {
+            for (int i = indice; i < m; i++) {
+                chaves[i] = chaves[i + 1];
+                valores[i] = valores[i + 1];
             }
+        } else {
+            //chave 0 recebe o valor menor que ele
+            chaves[0] = filhos[0].getChaves()[filhos[0].getContVal()];
+            filhos[0].removeValor(null, filhos[0].getContVal());
         }
-        if (index != -1) {
-            valores[index] = null;
-            contVal--;
-            if (contVal < grau) {
-                return false;
-            }
-            return true;
-        }
-        return false;
+        return contVal >= grau;
     }
 
-    
     public boolean removeFilho(int indice) {
         for (int i = indice; i < contFilhos; i++) {
-            if (i+1 < m) {
-                filhos[i] = filhos[i+1];
+            if (i + 1 < m) {
+                filhos[i] = filhos[i + 1];
             } else {
                 filhos[i] = null;
             }
         }
         contFilhos--;
-        if(contFilhos<grau)
-            return false;
-        return true;
+        return contFilhos >= grau;
     }
 }
