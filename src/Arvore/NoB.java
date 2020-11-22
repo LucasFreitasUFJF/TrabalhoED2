@@ -7,27 +7,27 @@ public class NoB {
     private long chaves[];
     private Livro valores[];
     private NoB filhos[];
-    private int n;
+    private int m; //tamanho do vetor
     private boolean folha;
     private int grau;
-    private int contVal;
+    private int contVal; //numero de chaves presentes no noh
     private int contFilhos;
 
     public NoB(int m) {
         this.chaves = new long[m - 1];
         this.valores = new Livro[m - 1];
         this.filhos = new NoB[m];
-        this.n = 0;
+        this.m = m - 1;
         this.folha = true;
         this.grau = m / 2;
         this.contVal = 0;
         this.contFilhos = 0;
     }
 
-    public int getN() {
-        return n;
+    public int getM() {
+        return m;
     }
-
+    
     public long[] getChaves() {
         return chaves;
     }
@@ -39,12 +39,12 @@ public class NoB {
     public NoB[] getFilhos() {
         return filhos;
     }
-
-    public void setN(int n) {
-        this.n = n;
+    
+    public int getContVal(){
+        return contVal;
     }
 
-    public boolean isFolha() {
+    public boolean ehFolha() {
         return folha;
     }
 
@@ -53,7 +53,7 @@ public class NoB {
     }
 
     public boolean setValor(Livro livro) {
-        if (contVal < n) {
+        if (contVal < m) {
             long auxChaves = livro.getId();
             Livro auxValores = livro;
 
@@ -81,7 +81,7 @@ public class NoB {
     
     
     public void setFilho(NoB filho, int indice) {
-        if (indice < n - 1 && indice >=0) {
+        if (indice < m && indice >=0) {
             filhos[indice] = filho;
             contFilhos++;
         }
@@ -109,7 +109,7 @@ public class NoB {
     
     public boolean removeFilho(int indice) {
         for (int i = indice; i < contFilhos; i++) {
-            if (i+1 < n-1) {
+            if (i+1 < m) {
                 filhos[i] = filhos[i+1];
             } else {
                 filhos[i] = null;
