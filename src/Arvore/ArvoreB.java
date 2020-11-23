@@ -15,6 +15,7 @@ public class ArvoreB {
     public ArvoreB(int m) {
         raiz = null;
         this.m = m;
+        this.grau = m / 2;
     }
 
     public NoB buscar(Livro livro) {
@@ -124,10 +125,34 @@ public class ArvoreB {
                         auxRemover(no.getFilhos()[i + 1], livro, 0);
                     }
                 } else {
-                    no.removeValor(livro, i);
+                    if (!no.removeValor(i)) {
+                        if (i == 0 && !no.ehFolha()) {
+                            //removeu do filho
+                            if (no.getFilhos()[1].getContVal() > grau) {
+                                redistribuicao(no);
+                            }
+                        } else {
+                            //removeu dele mesmo
+                            juncao();
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private void redistribuicao(NoB no) {
+        //no.getFilhos()[0].setValor(no.getValores()[0], grau-1);
+        Livro valorPai = no.getValores()[0];
+        Livro valor1 = no.getFilhos()[1].getValores()[0];
+
+        no.trocaValores(valor1, 0);
+        no.getFilhos()[0].trocaValores(valorPai, grau - 1);
+        no.getFilhos()[1].removeValor(0);
+    }
+
+    public void juncao() {
+
     }
 
 }

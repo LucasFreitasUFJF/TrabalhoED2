@@ -85,18 +85,21 @@ public class NoB {
         }
     }
 
-    public boolean removeValor(Livro livro, int indice) {
-        contVal--;
-        if (indice != 0) {
-            for (int i = indice; i < m; i++) {
-                chaves[i] = chaves[i + 1];
-                valores[i] = valores[i + 1];
-            }
-        } else {
+    public boolean removeValor(int indice) {
+        if (indice == 0 && contVal - 1 < grau && !ehFolha()) {
             //chave 0 recebe o valor menor que ele
             chaves[0] = filhos[0].getChaves()[filhos[0].getContVal()];
-            filhos[0].removeValor(null, filhos[0].getContVal());
+            filhos[0].removeValor(filhos[0].getContVal());
+            filhos[0].contVal--;
+            return filhos[0].contVal >= grau;
         }
+        
+        for (int i = indice; i < m; i++) {
+            chaves[i] = chaves[i + 1];
+            valores[i] = valores[i + 1];
+            contVal--;
+        }
+
         return contVal >= grau;
     }
 
@@ -110,5 +113,10 @@ public class NoB {
         }
         contFilhos--;
         return contFilhos >= grau;
+    }
+    
+    public void trocaValores(Livro livro, int indice){
+        chaves[indice] = livro.getId();
+        valores[indice] = livro;
     }
 }
