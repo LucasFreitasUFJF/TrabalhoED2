@@ -1,15 +1,19 @@
 package Arvore;
 
+import Registros.Livro;
+
 
 public class NoVP {
     private long chave;
+    private Livro valor;
     private boolean cor; //false = preto e true = vermelho
     private NoVP esq;
     private NoVP dir;
     private NoVP pai;
     
-    public NoVP(long chave) {
+    public NoVP(long chave, Livro valor) {
         this.chave = chave;
+        this.valor = valor;
         this.cor = true;
         this.esq = null;
         this.dir = null;
@@ -22,6 +26,14 @@ public class NoVP {
 
     public void setChave(long chave) {
         this.chave = chave;
+    }
+    
+    public Livro getValor() {
+        return valor;
+    }
+    
+    public void setValor(Livro valor) {
+        this.valor = valor;
     }
 
     public boolean getCor() {

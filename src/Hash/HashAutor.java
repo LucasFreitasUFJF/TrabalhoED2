@@ -102,13 +102,10 @@ public class HashAutor {
         }
     }
 
-    public void imprimeMaisFreq() {
-        System.out.println("\nAutores mais frequêntes: ");
+    public NoAutor[] getMaisFreq() {
         NoAutor[] autores = freq.toArray(new NoAutor[freq.size()]);
         MergeSort.ordena(autores);
-        for (int i = (freq.size()-1); i >= 0; i--) {
-            System.out.println(autores[i].getCont()+" "+autores[i].getNomeAutor());
-        }
+        return autores;
     }
 
     public int getColisoes() {

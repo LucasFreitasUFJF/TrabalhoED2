@@ -22,18 +22,17 @@ public class OpcoesMenu {
 
     private final Dados dados;
     private final Leitura leitura;
-    private final Escrita escrita;
 
     public OpcoesMenu() throws IOException {
         dados = new Dados();
         leitura = new Leitura();
-        escrita = new Escrita();
 
         dados.preCarregarArquivos();
     }
 
     //INÍCIO - PARTE 1
     public void executarParte1() throws IOException {
+        Escrita escrita = new Escrita("ResultadoParte1.txt");
         Livro[] vetorOriginal; //Vetor original com valores aleatórios
         Livro[] vetorAuxiliar; //Vetor usado para clone do vetor original
         int execucoes = 5;
@@ -105,40 +104,42 @@ public class OpcoesMenu {
             int k;
 
             //Imprie a média InsertionSort
-            escrita.imprimeCabecalio("Média InsertionSort");
+            escrita.imprimeCabecalioP1("Média InsertionSort");
             for (k = 0; k < parametrosN.size(); k++) {
-                escrita.imprimeDados(parametrosN.get(k), (mediaInsertion[k][0] / execucoes), mediaInsertion[k][1] / execucoes, mediaInsertion[k][2] / execucoes);
+                escrita.imprimeDadosP1(parametrosN.get(k), (mediaInsertion[k][0] / execucoes), mediaInsertion[k][1] / execucoes, mediaInsertion[k][2] / execucoes);
             }
 
             //Imprie a média ShellSort
-            escrita.imprimeCabecalio("Média ShellSort");
+            escrita.imprimeCabecalioP1("Média ShellSort");
             for (k = 0; k < parametrosN.size(); k++) {
-                escrita.imprimeDados(parametrosN.get(k), (mediaShell[k][0] / execucoes), mediaShell[k][1] / execucoes, mediaShell[k][2] / execucoes);
+                escrita.imprimeDadosP1(parametrosN.get(k), (mediaShell[k][0] / execucoes), mediaShell[k][1] / execucoes, mediaShell[k][2] / execucoes);
             }
 
             //Imprie a média MergeSort
-            escrita.imprimeCabecalio("Média MergeSort");
+            escrita.imprimeCabecalioP1("Média MergeSort");
             for (k = 0; k < parametrosN.size(); k++) {
-                escrita.imprimeDados(parametrosN.get(k), (mediaMerge[k][0] / execucoes), mediaMerge[k][1] / execucoes, mediaMerge[k][2] / execucoes);
+                escrita.imprimeDadosP1(parametrosN.get(k), (mediaMerge[k][0] / execucoes), mediaMerge[k][1] / execucoes, mediaMerge[k][2] / execucoes);
             }
 
             //Imprie a média QuickSort Recursivo
-            escrita.imprimeCabecalio("Média QuickSort Recursivo");
+            escrita.imprimeCabecalioP1("Média QuickSort Recursivo");
             for (k = 0; k < parametrosN.size(); k++) {
-                escrita.imprimeDados(parametrosN.get(k), (mediaQuickRec[k][0] / execucoes), mediaQuickRec[k][1] / execucoes, mediaQuickRec[k][2] / execucoes);
+                escrita.imprimeDadosP1(parametrosN.get(k), (mediaQuickRec[k][0] / execucoes), mediaQuickRec[k][1] / execucoes, mediaQuickRec[k][2] / execucoes);
             }
 
             //Imprie a média HeapSort
-            escrita.imprimeCabecalio("Média HeapSort");
+            escrita.imprimeCabecalioP1("Média HeapSort");
             for (k = 0; k < parametrosN.size(); k++) {
-                escrita.imprimeDados(parametrosN.get(k), (mediaHeap[k][0] / execucoes), mediaHeap[k][1] / execucoes, mediaHeap[k][2] / execucoes);
+                escrita.imprimeDadosP1(parametrosN.get(k), (mediaHeap[k][0] / execucoes), mediaHeap[k][1] / execucoes, mediaHeap[k][2] / execucoes);
             }
         }
+        escrita.close();
     }
     //FINAL - PARTE 1
 
     //INÍCIO - PARTE 2
     public void executarParte2() throws IOException {
+        Escrita escrita = new Escrita("ResultadoParte2.txt");
         ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 2.txt");
         Scanner teclado = new Scanner(System.in);
         int M;
@@ -147,7 +148,7 @@ public class OpcoesMenu {
             Livro[] livros = dados.getNLivros(parametrosN.get(0));
             Autor[] autores = dados.getAutores();
 
-            System.out.println("Digite o valor de M: ");
+            System.out.println("Digite o valor de M(qtde de frequêntes): ");
             M = teclado.nextInt();
 
             HashLivro hashLivro = new HashLivro(100000);
@@ -166,10 +167,12 @@ public class OpcoesMenu {
                     }
                 }
             }
-            hashAutor.imprimeMaisFreq();
-            //hashLivro.imprime();
-            //System.out.println(" ");
-            //hashAutor.imprime();
+            NoAutor[] autoresFrequentes = hashAutor.getMaisFreq();
+            escrita.imprimeCabecalioP2(parametrosN.get(0), M);
+            for(int j=autoresFrequentes.length-1; j>=0; j--) {
+                escrita.imprimeDadosP2(autoresFrequentes[j].getCont(), autoresFrequentes[j].getNomeAutor());
+            }
+            escrita.close();
         }
     }
     //FINAL - PARTE 2
@@ -177,15 +180,15 @@ public class OpcoesMenu {
     //INÍCIO - PARTE 3
     public void executarParte3() throws IOException {
         ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 3.txt");
-        Livro[] livros = dados.getNLivros(10);
+        Livro[] livros = dados.getNLivros(7);
         ArvoreVP avp = new ArvoreVP();
-        ArvoreB avb = new ArvoreB(4);
+        //ArvoreB avb = new ArvoreB(4);
         for (Livro livro : livros) {
             avp.insere(livro);
-            avb.insere(livro);
+            //avb.insere(livro);
         }
         avp.print();
-        avb.print();
+        //avb.print();
 
     }
     //FINAL - PARTE 3
@@ -215,8 +218,6 @@ public class OpcoesMenu {
     }
 
     //Início - Funções de uso geral
-    public void closeEscrita() throws IOException {
-        escrita.close();
-    }
+    
     //Final - Funções de uso geral
 }

@@ -25,8 +25,7 @@ public class Main {
                         break;
                 case 3: opcoesMenu.executarParte3();
                         break;
-                case 0: opcoesMenu.closeEscrita();
-                        break;
+                case 0: break;
                         
                 default: System.out.println("Opção inválida!");
                         break;
