@@ -23,14 +23,14 @@ public class ArvoreB {
     }
 
     private NoB auxBuscar(NoB no, Livro livro, int i) {
-        if (no != null && i <= no.getContVal()) {
+        if (no != null && i < no.getContVal()) {
             if (livro.getId() < no.getChaves()[i]) {
                 //vai para o filho na posicao 0.
                 return auxBuscar(no.getFilhos()[i], livro, 0);
             } else if (livro.getId() > no.getChaves()[i]) {
                 if (i < no.getM()) {
                     //anda para o proximo indice do vetor.
-                    return auxBuscar(no, livro, i++);
+                    return auxBuscar(no, livro, i+1);
                 } else {
                     //vai para o ultimo vetor de filhos
                     return auxBuscar(no.getFilhos()[i + 1], livro, 0);
@@ -50,31 +50,31 @@ public class ArvoreB {
             System.out.println(livro.getId() / 10000000);
         } else {
             if (buscar(livro) == null) {
-                if (raiz.getContVal() < raiz.getM()) {
-                    auxInsere(raiz, livro, 0);
-                } else {
-                    cisao(raiz, livro);
-                }
+                auxInsere(raiz, livro, 0);
             }
         }
     }
 
-    public void auxInsere(NoB no, Livro livro, int i) {
+    private void auxInsere(NoB no, Livro livro, int i) {
         if (no != null) {
-            if (i <= no.getContVal()) {
+            if (i < no.getContVal()) {
                 if (livro.getId() < no.getChaves()[i]) {
                     auxInsere(no.getFilhos()[i], livro, 0);
                 } else if (livro.getId() > no.getChaves()[i]) {
                     if (i < no.getM()) {
-                        auxInsere(no, livro, i++);
+                        auxInsere(no, livro, i+1);
                     } else {
                         auxInsere(no.getFilhos()[i + 1], livro, 0);
                     }
                 } else {
-                    no.setValor(livro, i);
+                    if (!no.setValor(livro, i)) {
+                        cisao(no, livro);
+                    }
                 }
             } else {
-                no.setValor(livro, i);
+                if (!no.setValor(livro, i)) {
+                    cisao(no, livro);
+                }
             }
         }
     }
@@ -83,7 +83,7 @@ public class ArvoreB {
         NoB cisao = new NoB(m + 1);
 
         //faz um vetor com uma posicao a mais, para poder pegar o meio
-        for (int i = 0; i <= no.getM(); i++) {
+        for (int i = 0; i < no.getM(); i++) {
             cisao.setValor(no.getValores()[i], i);
         }
 
@@ -113,7 +113,7 @@ public class ArvoreB {
         }
     }
 
-    public void auxRemover(NoB no, Livro livro, int i) {
+    private void auxRemover(NoB no, Livro livro, int i) {
         if (no != null) {
             if (i <= no.getContVal()) {
                 if (livro.getId() < no.getChaves()[i]) {
@@ -151,8 +151,29 @@ public class ArvoreB {
         no.getFilhos()[1].removeValor(0);
     }
 
-    public void juncao() {
+    private void juncao() {
 
+    }
+
+    public void print() {
+        auxPrint(raiz, 0);
+    }
+
+    private void auxPrint(NoB p, int nivel) {
+        if (p != null) {
+            System.out.print("(" + nivel + ")");
+            for (int i = 0; i < nivel; i++) {
+                System.out.print("--");
+            }
+
+            for (int i = 0; i < p.getContVal(); i++) {
+                System.out.print(p.getChaves()[i] + ", ");
+            }
+
+            for (int j = 0; j < p.getContFilho(); j++) {
+                auxPrint(p.getFilhos()[j], nivel + 1);
+            }
+        }
     }
 
 }

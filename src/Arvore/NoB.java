@@ -43,6 +43,10 @@ public class NoB {
     public int getContVal() {
         return contVal;
     }
+    
+    public int getContFilho() {
+        return contFilhos;
+    }
 
     public boolean ehFolha() {
         return folha;
