@@ -1,0 +1,21 @@
+-----------------------------------------------------------
+Parte 2 - N = 10000, M = 10
+
+HashLivro
+	Tempo = 5ms
+	Colisões = 517
+Busca HashLivro e insersão hashAutores
+	Tempo = 5693ms
+	Colisões = 693
+
+Frequencia		Autor
+31			Dan Danford
+29			Lawrence E. Hillman
+4			Mick Van Lier
+2			Sanchez Jésus
+1			Paper Trail Journals
+0			Jim Wardhaugh
+0			Mark Gibney
+0			Colin Wheeler
+0			Joshua Eisenman
+0			Walter Bagehot
