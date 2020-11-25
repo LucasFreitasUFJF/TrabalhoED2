@@ -5,6 +5,7 @@ import Trabalho.Metrica;
 
 public class ArvoreB {
 
+    private int t;
     private NoB raiz;
     private int ordemM;
     private int cont;
@@ -149,16 +150,16 @@ public class ArvoreB {
             for (int i = 0; i < nivel; i++) {
                 System.out.print("--");
             }
+        }
 
-            for (int i = 0; i < p.getN(); i++) {
-                System.out.print(p.getChaves().get(i) + ", ");
-            }
-            System.out.println("");
+        for (int i = 0; i < p.getN(); i++) {
+            System.out.print(p.getChaves().get(i) + ", ");
+        }
+        System.out.println("");
 
-            
-            for (int j = 0; j < p.getFilhos().size(); j++) {
-                auxPrint(p.getFilhos().get(j), nivel + 1);
-            }
+
+        for (int j = 0; j < p.getFilhos().size(); j++) {
+            auxPrint(p.getFilhos().get(j), nivel + 1);
         }
     }
     
