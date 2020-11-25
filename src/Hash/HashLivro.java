@@ -1,18 +1,17 @@
 package Hash;
 
 import Registros.Livro;
+import Trabalho.Metrica;
 import java.util.ArrayList;
 
 public class HashLivro {
 
     private ArrayList<NoLivro> data[];
     private int n;
-    private int colisoes;
 
     public HashLivro(int n) {
         this.data = new ArrayList[n];
         this.n = n;
-        this.colisoes = 0;
     }
 
     private long construirHash(long valor) {
@@ -40,20 +39,12 @@ public class HashLivro {
             if (data[hashKey] == null) {
                 data[hashKey] = new ArrayList<>();
             } else {
-                this.colisoes++;
+                Metrica.incrementaColisoes();
             }
             data[hashKey].add(no);
         } else {
-            this.colisoes++;
+            Metrica.incrementaColisoes();
         }
-    }
-
-    public int getColisoes() {
-        return colisoes;
-    }
-
-    public void zerarColisoes() {
-        this.colisoes = 0;
     }
 
     public void imprime() {

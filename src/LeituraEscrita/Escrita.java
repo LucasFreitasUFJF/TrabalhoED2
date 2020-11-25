@@ -27,13 +27,15 @@ public class Escrita {
     //FINAL - PARTE 1
     
     //INÍCIO - PARTE 2
-    public void imprimeCabecalioP2(int n, int m) {
+    public void imprimeCabecalioP2(int n, int m, long tempohashLivro, long colisoesHashLivros, long tempoHashAutores, long colisoesHashAutores) {
         gravarSaida.write("-----------------------------------------------------------\n");
-        gravarSaida.write("Parte 2 - N = "+n+", M = "+m+"\n");
+        gravarSaida.write("Parte 2 - N = "+n+", M = "+m+"\n\n");
+        gravarSaida.write("HashLivro\n\tTempo = "+tempohashLivro+"ms\n\tColisões = "+colisoesHashLivros+"\n");
+        gravarSaida.write("Busca HashLivro e insersão hashAutores\n\tTempo = "+tempoHashAutores+"ms\n\tColisões = "+colisoesHashAutores+"\n\n");
         gravarSaida.write("Frequencia\t\tAutor\n");
     }
     public void imprimeDadosP2(int freq, String autor) {
-        gravarSaida.write(freq+"\t"+autor+"\n");
+        gravarSaida.write(freq+"\t\t\t"+autor+"\n");
     }
     //FINAL - PARTE 2
     

@@ -1,10 +1,10 @@
 package Trabalho;
 
-import Arvore.ArvoreB;
 import Arvore.ArvoreVP;
 import Hash.HashAutor;
 import Hash.HashLivro;
 import Hash.NoAutor;
+import Hash.NoLivro;
 import Registros.Livro;
 import LeituraEscrita.Leitura;
 import LeituraEscrita.Escrita;
@@ -148,16 +148,34 @@ public class OpcoesMenu {
             Livro[] livros = dados.getNLivros(parametrosN.get(0));
             Autor[] autores = dados.getAutores();
 
+            long[][] resultado = new long[2][2]; // Posição 0 = Inserção livro, Posição 1 = Busca na tabela livro e inserção na tabela autor || tempo e colisões
+            long tempoInicial;
+            long tempoFinal;
+            
             System.out.println("Digite o valor de M(qtde de frequêntes): ");
             M = teclado.nextInt();
 
             HashLivro hashLivro = new HashLivro(100000);
             HashAutor hashAutor = new HashAutor(60000, M);
-            for (int i = 0; i < parametrosN.size(); i++) {
-                //    livros = dados.getNLivros(parametrosN.get(i));
-                for (Livro livro : livros) {
-                    hashLivro.insere(livro);
-                    for (long id : livro.getAuthors()) {
+            
+            // Inserção tabela livros
+            Metrica.clear();
+            tempoInicial = System.currentTimeMillis();
+            for (Livro livro : livros) {
+                hashLivro.insere(livro);
+            }
+            tempoFinal = System.currentTimeMillis();
+            resultado[0][0] = tempoFinal-tempoInicial;
+            resultado[0][1] = Metrica.getColisoes();
+            
+            //Busca na tabela livro e inserção na tabela autor
+            Metrica.clear();
+            NoLivro aux;
+            tempoInicial = System.currentTimeMillis();
+            for(Livro livro : livros) {
+                aux = hashLivro.busca(livro.getId());
+                if(aux != null) {
+                    for (long id : aux.getValor().getAuthors()) {
                         for (Autor autor : autores) {
                             if (id == autor.getId()) {
                                 hashAutor.insere(autor);
@@ -167,8 +185,13 @@ public class OpcoesMenu {
                     }
                 }
             }
+            tempoFinal = System.currentTimeMillis();
+            resultado[1][0] = tempoFinal-tempoInicial;
+            resultado[1][1] = Metrica.getColisoes();
+            
+            
             NoAutor[] autoresFrequentes = hashAutor.getMaisFreq();
-            escrita.imprimeCabecalioP2(parametrosN.get(0), M);
+            escrita.imprimeCabecalioP2(parametrosN.get(0), M, resultado[0][0], resultado[0][1], resultado[1][0], resultado[1][1]);
             for(int j=autoresFrequentes.length-1; j>=0; j--) {
                 escrita.imprimeDadosP2(autoresFrequentes[j].getCont(), autoresFrequentes[j].getNomeAutor());
             }
@@ -179,27 +202,95 @@ public class OpcoesMenu {
 
     //INÍCIO - PARTE 3
     public void executarParte3() throws IOException {
+        int execucoes = 5;
         ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 3.txt");
-        Livro[] livros = dados.getNLivros(7);
+        Livro[] livros;
+        
         ArvoreVP avp = new ArvoreVP();
-        //ArvoreB avb = new ArvoreB(4);
-        for (Livro livro : livros) {
-            avp.insere(livro);
-            //avb.insere(livro);
+        ArvoreVP arb1 = new ArvoreVP(); //Passar valor d = ?
+        ArvoreVP arb2 = new ArvoreVP(); // Passar valor d = ?
+        
+        if(parametrosN != null) {
+            long[][][] mediaArvoreVP = new long[parametrosN.size()][2][3]; //Busca e Inserção || tempo, comparacoes e rotacões
+            long[][][] mediaArvoreB1 = new long[parametrosN.size()][2][2]; //Busca e Inserção || tempo e overflows
+            long[][][] mediaArvoreB2 = new long[parametrosN.size()][2][2]; //Busca e Inserção || tempo e overflows
+            long tempoInicial;
+            long tempoFinal;
+            for(int i=0; i< execucoes; i++) {
+                for(int j=0; j<parametrosN.size(); j++) {
+                    livros = dados.getNLivros(parametrosN.get(j));
+                    int k;
+                    
+                    //Inserção ArvoreVP
+                    Metrica.clear();
+                    tempoInicial = System.currentTimeMillis();
+                    for(k=0; k<livros.length; k++) {
+                        avp.insere(livros[k]);
+                    }
+                    tempoFinal = System.currentTimeMillis();
+                    mediaArvoreVP[j][0][0] += tempoFinal - tempoInicial;
+                    mediaArvoreVP[j][0][1] += Metrica.getComparacoes();
+                    mediaArvoreVP[j][0][2] += Metrica.getRotacoes();
+                    
+                    //Inserção ArvoreB d = ?
+                    Metrica.clear();
+                    tempoInicial = System.currentTimeMillis();
+                    for(k=0; k<livros.length; k++) {
+                        arb1.insere(livros[k]);
+                    }
+                    tempoFinal = System.currentTimeMillis();
+                    mediaArvoreB1[j][0][0] += tempoFinal - tempoInicial;
+                    mediaArvoreB1[j][0][1] += Metrica.getOverflow();
+                    
+                    //Inserção ArvoreB d = ?
+                    Metrica.clear();
+                    tempoInicial = System.currentTimeMillis();
+                    for(k=0; k<livros.length; k++) {
+                        arb2.insere(livros[k]);
+                    }
+                    tempoFinal = System.currentTimeMillis();
+                    mediaArvoreB2[j][0][0] += tempoFinal - tempoInicial;
+                    mediaArvoreB2[j][0][1] += Metrica.getOverflow();
+                    
+                    //Busca ArvoreVP
+                    Metrica.clear();
+                    tempoInicial = System.currentTimeMillis();
+                    for(k=0; k<livros.length; k++) {
+                        avp.buscar(livros[k]);
+                    }
+                    tempoFinal = System.currentTimeMillis();
+                    mediaArvoreVP[j][1][0] += tempoFinal - tempoInicial;
+                    mediaArvoreVP[j][1][1] += Metrica.getComparacoes();
+                    mediaArvoreVP[j][1][2] += Metrica.getRotacoes();
+                    
+                    //Busca ArvoreB d = ?
+                    Metrica.clear();
+                    tempoInicial = System.currentTimeMillis();
+                    for(k=0; k<livros.length; k++) {
+                        arb1.buscar(livros[k]);
+                    }
+                    tempoFinal = System.currentTimeMillis();
+                    mediaArvoreB1[j][1][0] += tempoFinal - tempoInicial;
+                    mediaArvoreB1[j][1][1] += Metrica.getOverflow();
+                    
+                    //Busca ArvoreB d = ?
+                    Metrica.clear();
+                    tempoInicial = System.currentTimeMillis();
+                    for(k=0; k<livros.length; k++) {
+                        arb2.buscar(livros[k]);
+                    }
+                    tempoFinal = System.currentTimeMillis();
+                    mediaArvoreB2[j][0][0] += tempoFinal - tempoInicial;
+                    mediaArvoreB2[j][0][1] += Metrica.getOverflow();
+                }
+            }
         }
-        avp.print();
-        //avb.print();
-
+        
+        //Fazer impressão do resultado
     }
     //FINAL - PARTE 3
 
-    /*public void test() {
-        Livro[] livros = dados.getNLivros(10);
-        MergeSort.ordena(livros);
-        for(Livro livro : livros) {
-            System.out.println(livro.getTitle());
-        }
-    }*/
+    
     private void print(Livro[] livros) {
         for (Livro livro : livros) {
             livro.print();

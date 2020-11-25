@@ -2,13 +2,13 @@ package Hash;
 
 import Ordenacao.MergeSort;
 import Registros.Autor;
+import Trabalho.Metrica;
 import java.util.ArrayList;
 
 public class HashAutor {
 
     private ArrayList<NoAutor> data[];
     private int n;
-    private int colisoes;
     private int m;
     private ArrayList<NoAutor> freq;
     private NoAutor maisFreq;
@@ -17,7 +17,6 @@ public class HashAutor {
     public HashAutor(int n, int m) {
         this.data = new ArrayList[n];
         this.n = n;
-        this.colisoes = 0;
         this.m = m;
         this.freq = new ArrayList<>();
         this.maisFreq = null;
@@ -50,14 +49,14 @@ public class HashAutor {
             if (data[hashKey] == null) {
                 data[hashKey] = new ArrayList<>();
             } else {
-                this.colisoes++;
+                Metrica.incrementaColisoes();
             }
             data[hashKey].add(no);
             insereListaMaisFreq(no);
         } else {
             noBusca.incrementaCont();
             insereListaMaisFreq(noBusca);
-            this.colisoes++;
+            Metrica.incrementaColisoes();
         }
     }
 
@@ -106,14 +105,6 @@ public class HashAutor {
         NoAutor[] autores = freq.toArray(new NoAutor[freq.size()]);
         MergeSort.ordena(autores);
         return autores;
-    }
-
-    public int getColisoes() {
-        return colisoes;
-    }
-
-    public void zerarColisoes() {
-        this.colisoes = 0;
     }
 
     public void imprime() {

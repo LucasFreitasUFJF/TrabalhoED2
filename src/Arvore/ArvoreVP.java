@@ -1,6 +1,7 @@
 package Arvore;
 
 import Registros.Livro;
+import Trabalho.Metrica;
 
 public class ArvoreVP {
     private NoVP raiz;
@@ -15,9 +16,9 @@ public class ArvoreVP {
     
     private NoVP auxBuscar(NoVP no, Livro livro) {
         if(no != null) {
-            if(livro.getId() < no.getChave()) {
+            if(livro.getId() < no.getChave() && Metrica.incrementaComparacoes()) {
                 return auxBuscar(no.getEsq(), livro);
-            } else if(livro.getId() > no.getChave()) {
+            } else if(livro.getId() > no.getChave() && Metrica.incrementaComparacoes()) {
                 return auxBuscar(no.getDir(), livro);
             } else {
                 return no;
@@ -40,7 +41,7 @@ public class ArvoreVP {
             System.out.println(livro.getId()/10000000);
             no.setPai(pai);
             if(pai != null) {
-                if(livro.getId() < pai.getChave())
+                if(livro.getId() < pai.getChave() && Metrica.incrementaComparacoes())
                     pai.setEsq(no);
                 else 
                     pai.setDir(no);
@@ -53,7 +54,7 @@ public class ArvoreVP {
                 return;
             }
             atualizarInsercao(no);
-        } else if(livro.getId() < no.getChave()) {
+        } else if(livro.getId() < no.getChave() && Metrica.incrementaComparacoes()) {
             auxInsere(no, no.getEsq(), livro);
         } else {
             auxInsere(no, no.getDir(), livro);
@@ -214,6 +215,7 @@ public class ArvoreVP {
     }
     
     private void rotacaoSimplesEsq(NoVP p) {
+        Metrica.incrementaRotacoes();
         NoVP q = p.getDir();
         p.setDir(q.getEsq());
         if(p.getDir() != null) 
@@ -233,6 +235,7 @@ public class ArvoreVP {
     }
     
     private void rotacaoSimplesDir(NoVP p) {
+        Metrica.incrementaRotacoes();
         NoVP q = p.getEsq();
         p.setEsq(q.getDir());
         if(p.getEsq()!= null) 
