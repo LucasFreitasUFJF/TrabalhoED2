@@ -38,7 +38,6 @@ public class ArvoreVP {
     private void auxInsere(NoVP pai, NoVP no, Livro livro) {
         if(no == null) {
             no = new NoVP(livro.getId(), livro);
-            System.out.println(livro.getId()/10000000);
             no.setPai(pai);
             if(pai != null) {
                 if(livro.getId() < pai.getChave() && Metrica.incrementaComparacoes())

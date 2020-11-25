@@ -7,16 +7,18 @@ public class NoB {
     private long chaves[];
     private Livro valores[];
     private NoB filhos[];
+    private NoB pai;
     private int m; //tamanho do vetor
     private boolean folha;
     private int grau;
     private int contVal; //numero de chaves presentes no noh
     private int contFilhos;
 
-    public NoB(int m) {
+    public NoB(int m, NoB pai) {
         this.chaves = new long[m - 1];
         this.valores = new Livro[m - 1];
         this.filhos = new NoB[m];
+        this.pai = pai;
         this.m = m - 1;
         this.folha = true;
         this.grau = m / 2;
@@ -40,10 +42,14 @@ public class NoB {
         return filhos;
     }
 
+    public NoB getPai() {
+        return pai;
+    }
+
     public int getContVal() {
         return contVal;
     }
-    
+
     public int getContFilho() {
         return contFilhos;
     }
@@ -73,8 +79,6 @@ public class NoB {
                 indice++;
             }
 
-            this.valores[contVal] = livro;
-            this.chaves[contVal] = livro.getId();
             contVal++;
             return true;
         } else {
@@ -82,10 +86,15 @@ public class NoB {
         }
     }
 
-    public void setFilho(NoB filho, int indice) {
-        if (indice < m && indice >= 0) {
+    public void setFilho(NoB filho, int indice, NoB pai) {
+        if (filhos == null) {
+            return;
+        } else if (filho == null) {
             filhos[indice] = filho;
-            contFilhos++;
+        } else if (indice < m && indice >= 0) {
+            filhos[indice] = filho;
+            filhos[indice].pai = pai;
+            contFilhos += 1;
         }
     }
 
@@ -97,7 +106,7 @@ public class NoB {
             filhos[0].contVal--;
             return filhos[0].contVal >= grau;
         }
-        
+
         for (int i = indice; i < m; i++) {
             chaves[i] = chaves[i + 1];
             valores[i] = valores[i + 1];
@@ -118,8 +127,8 @@ public class NoB {
         contFilhos--;
         return contFilhos >= grau;
     }
-    
-    public void trocaValores(Livro livro, int indice){
+
+    public void trocaValores(Livro livro, int indice) {
         chaves[indice] = livro.getId();
         valores[indice] = livro;
     }

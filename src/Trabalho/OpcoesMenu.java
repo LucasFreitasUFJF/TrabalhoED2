@@ -1,5 +1,6 @@
 package Trabalho;
 
+import Arvore.ArvoreB;
 import Arvore.ArvoreVP;
 import Hash.HashAutor;
 import Hash.HashLivro;
@@ -206,9 +207,9 @@ public class OpcoesMenu {
         ArrayList<Integer> parametrosN = leitura.lerParametros("Parte 3.txt");
         Livro[] livros;
         
-        ArvoreVP avp = new ArvoreVP();
-        ArvoreVP arb1 = new ArvoreVP(); //Passar valor d = ?
-        ArvoreVP arb2 = new ArvoreVP(); // Passar valor d = ?
+        ArvoreVP avp;
+        ArvoreB arb1; //Passar valor d = ?
+        ArvoreB arb2; // Passar valor d = ?
         
         if(parametrosN != null) {
             long[][][] mediaArvoreVP = new long[parametrosN.size()][2][3]; //Busca e Inserção || tempo, comparacoes e rotacões
@@ -218,9 +219,12 @@ public class OpcoesMenu {
             long tempoFinal;
             for(int i=0; i< execucoes; i++) {
                 for(int j=0; j<parametrosN.size(); j++) {
+                    avp = new ArvoreVP();
+                    arb1 = new ArvoreB(5);
+                    arb2 = new ArvoreB(41);
                     livros = dados.getNLivros(parametrosN.get(j));
                     int k;
-                    
+                    /*
                     //Inserção ArvoreVP
                     Metrica.clear();
                     tempoInicial = System.currentTimeMillis();
@@ -231,7 +235,7 @@ public class OpcoesMenu {
                     mediaArvoreVP[j][0][0] += tempoFinal - tempoInicial;
                     mediaArvoreVP[j][0][1] += Metrica.getComparacoes();
                     mediaArvoreVP[j][0][2] += Metrica.getRotacoes();
-                    
+                    */
                     //Inserção ArvoreB d = ?
                     Metrica.clear();
                     tempoInicial = System.currentTimeMillis();
@@ -239,10 +243,12 @@ public class OpcoesMenu {
                         arb1.insere(livros[k]);
                     }
                     tempoFinal = System.currentTimeMillis();
+                    arb1.print();
                     mediaArvoreB1[j][0][0] += tempoFinal - tempoInicial;
                     mediaArvoreB1[j][0][1] += Metrica.getOverflow();
                     
                     //Inserção ArvoreB d = ?
+                    /*
                     Metrica.clear();
                     tempoInicial = System.currentTimeMillis();
                     for(k=0; k<livros.length; k++) {
@@ -281,7 +287,7 @@ public class OpcoesMenu {
                     }
                     tempoFinal = System.currentTimeMillis();
                     mediaArvoreB2[j][0][0] += tempoFinal - tempoInicial;
-                    mediaArvoreB2[j][0][1] += Metrica.getOverflow();
+                    mediaArvoreB2[j][0][1] += Metrica.getOverflow();*/
                 }
             }
         }
