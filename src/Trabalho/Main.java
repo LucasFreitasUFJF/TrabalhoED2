@@ -15,7 +15,7 @@ public class Main {
             System.out.println("1 - Parte 1");
             System.out.println("2 - Parte 2");
             System.out.println("3 - Parte 3");
-            System.out.println("0 - Salvar e Sair");
+            System.out.println("0 - Sair");
             opcao = input.nextInt();
             
             switch(opcao) {

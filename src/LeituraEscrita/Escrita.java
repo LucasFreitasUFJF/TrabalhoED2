@@ -40,11 +40,17 @@ public class Escrita {
     //FINAL - PARTE 2
     
     //INÍCIO - PARTE 3
-    public void imprimeCabecalioP3() {
-        
+    public void imprimeCabecalioP3(String execucao, boolean tipoArvore) {
+        gravarSaida.write("-----------------------------------------------------------\n");
+        gravarSaida.write("Parte 3 - "+execucao+"\n");
+        if(tipoArvore) {
+            gravarSaida.write("Tamanho\t\tTempo(ms)\tCompações\tRotações\n");
+        } else {
+            gravarSaida.write("Tamanho\t\tTempo(ms)\tCompações\tOverFlows\n");
+        }
     }
-    public void imprimeDadosP3() {
-        
+    public void imprimeDadosP3(long parametro, long tempo, long comparacoes, long rotOver) {
+        gravarSaida.write(parametro+"\t\t"+tempo+"\t\t"+comparacoes+"\t\t"+rotOver+"\n");
     }
     //FINAL - PARTE 3
     

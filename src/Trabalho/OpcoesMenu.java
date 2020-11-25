@@ -212,9 +212,9 @@ public class OpcoesMenu {
         ArvoreB arb2; // Passar valor d = ?
         
         if(parametrosN != null) {
-            long[][][] mediaArvoreVP = new long[parametrosN.size()][2][3]; //Busca e Inserção || tempo, comparacoes e rotacões
-            long[][][] mediaArvoreB1 = new long[parametrosN.size()][2][2]; //Busca e Inserção || tempo e overflows
-            long[][][] mediaArvoreB2 = new long[parametrosN.size()][2][2]; //Busca e Inserção || tempo e overflows
+            long[][][] mediaArvoreVP = new long[parametrosN.size()][2][3]; //Inserção e Busca || tempo, comparacoes e rotacões
+            long[][][] mediaArvoreB1 = new long[parametrosN.size()][2][3]; //Inserção e Busca || tempo, comparacoes e overflows
+            long[][][] mediaArvoreB2 = new long[parametrosN.size()][2][3]; //Inserção e Busca || tempo, comparacoes e overflows
             long tempoInicial;
             long tempoFinal;
             for(int i=0; i< execucoes; i++) {
@@ -224,9 +224,10 @@ public class OpcoesMenu {
                     arb2 = new ArvoreB(41);
                     livros = dados.getNLivros(parametrosN.get(j));
                     int k;
-                    /*
+                    
                     //Inserção ArvoreVP
                     Metrica.clear();
+                    System.out.println("Inserindo na Arvore Vermelho e Preto...");
                     tempoInicial = System.currentTimeMillis();
                     for(k=0; k<livros.length; k++) {
                         avp.insere(livros[k]);
@@ -235,31 +236,34 @@ public class OpcoesMenu {
                     mediaArvoreVP[j][0][0] += tempoFinal - tempoInicial;
                     mediaArvoreVP[j][0][1] += Metrica.getComparacoes();
                     mediaArvoreVP[j][0][2] += Metrica.getRotacoes();
-                    */
-                    //Inserção ArvoreB d = ?
+                    
+                    //Inserção ArvoreB d = 5
                     Metrica.clear();
+                    System.out.println("Inserindo na ArvoreB com d = 5...");
                     tempoInicial = System.currentTimeMillis();
                     for(k=0; k<livros.length; k++) {
                         arb1.insere(livros[k]);
                     }
                     tempoFinal = System.currentTimeMillis();
-                    arb1.print();
                     mediaArvoreB1[j][0][0] += tempoFinal - tempoInicial;
-                    mediaArvoreB1[j][0][1] += Metrica.getOverflow();
+                    mediaArvoreB1[j][0][1] += Metrica.getComparacoes();
+                    mediaArvoreB1[j][0][2] += Metrica.getOverflow();
                     
-                    //Inserção ArvoreB d = ?
-                    /*
+                    //Inserção ArvoreB d = 41
                     Metrica.clear();
+                    System.out.println("Inserindo na ArvoreB com d = 41...");
                     tempoInicial = System.currentTimeMillis();
                     for(k=0; k<livros.length; k++) {
                         arb2.insere(livros[k]);
                     }
                     tempoFinal = System.currentTimeMillis();
                     mediaArvoreB2[j][0][0] += tempoFinal - tempoInicial;
-                    mediaArvoreB2[j][0][1] += Metrica.getOverflow();
+                    mediaArvoreB2[j][0][1] += Metrica.getComparacoes();
+                    mediaArvoreB2[j][0][2] += Metrica.getOverflow();
                     
                     //Busca ArvoreVP
                     Metrica.clear();
+                    System.out.println("Buscando na Arvore Vermelho e Preto...");
                     tempoInicial = System.currentTimeMillis();
                     for(k=0; k<livros.length; k++) {
                         avp.buscar(livros[k]);
@@ -269,30 +273,74 @@ public class OpcoesMenu {
                     mediaArvoreVP[j][1][1] += Metrica.getComparacoes();
                     mediaArvoreVP[j][1][2] += Metrica.getRotacoes();
                     
-                    //Busca ArvoreB d = ?
+                    //Busca ArvoreB d = 5
                     Metrica.clear();
+                    System.out.println("Buscando na ArvoreB com d = 5...");
                     tempoInicial = System.currentTimeMillis();
                     for(k=0; k<livros.length; k++) {
                         arb1.buscar(livros[k]);
                     }
                     tempoFinal = System.currentTimeMillis();
                     mediaArvoreB1[j][1][0] += tempoFinal - tempoInicial;
-                    mediaArvoreB1[j][1][1] += Metrica.getOverflow();
+                    mediaArvoreB1[j][1][1] += Metrica.getComparacoes();
+                    mediaArvoreB1[j][1][2] += Metrica.getOverflow();
                     
-                    //Busca ArvoreB d = ?
+                    //Busca ArvoreB d = 41
                     Metrica.clear();
+                    System.out.println("Buscando na ArvoreB com d = 41...\n");
                     tempoInicial = System.currentTimeMillis();
                     for(k=0; k<livros.length; k++) {
                         arb2.buscar(livros[k]);
                     }
                     tempoFinal = System.currentTimeMillis();
-                    mediaArvoreB2[j][0][0] += tempoFinal - tempoInicial;
-                    mediaArvoreB2[j][0][1] += Metrica.getOverflow();*/
+                    mediaArvoreB2[j][1][0] += tempoFinal - tempoInicial;
+                    mediaArvoreB2[j][1][1] += Metrica.getComparacoes();
+                    mediaArvoreB2[j][1][2] += Metrica.getOverflow();
                 }
             }
+            Escrita escritaInsercao = new Escrita("saidaInsercao.txt");
+            Escrita escritaBusca = new Escrita("saidaBusca.txt");
+            int k;
+            
+            //Imprime média inserção arvore vermelho e preto
+            escritaInsercao.imprimeCabecalioP3("Média Inserção - ArvoreVP", true);
+            for(k=0; k<parametrosN.size(); k++) {
+                escritaInsercao.imprimeDadosP3(parametrosN.get(k), mediaArvoreVP[k][0][0]/execucoes, mediaArvoreVP[k][0][1]/execucoes, mediaArvoreVP[k][0][2]/execucoes);
+            }
+            
+            //Imprime média busca arvore vermelho e preto
+            escritaBusca.imprimeCabecalioP3("Média Busca - ArvoreVP", true);
+            for(k=0; k<parametrosN.size(); k++) {
+                escritaBusca.imprimeDadosP3(parametrosN.get(k), mediaArvoreVP[k][1][0]/execucoes, mediaArvoreVP[k][1][1]/execucoes, mediaArvoreVP[k][1][2]/execucoes);
+            }
+            
+            //Imprime média inserção arvore B1
+            escritaInsercao.imprimeCabecalioP3("Média Inserção - ArvoreB D = 5", false);
+            for(k=0; k<parametrosN.size(); k++) {
+                escritaInsercao.imprimeDadosP3(parametrosN.get(k), mediaArvoreB1[k][0][0]/execucoes, mediaArvoreB1[k][0][1]/execucoes, mediaArvoreB1[k][0][2]/execucoes);
+            }
+            
+            //Imprime média busca arvore B1
+            escritaBusca.imprimeCabecalioP3("Média Busca - ArvoreB D = 5", false);
+            for(k=0; k<parametrosN.size(); k++) {
+                escritaBusca.imprimeDadosP3(parametrosN.get(k), mediaArvoreB1[k][1][0]/execucoes, mediaArvoreB1[k][1][1]/execucoes, mediaArvoreB1[k][1][2]/execucoes);
+            }
+            
+            //Imprime média inserção arvore B2
+            escritaInsercao.imprimeCabecalioP3("Média Inserção - ArvoreB D = 41", false);
+            for(k=0; k<parametrosN.size(); k++) {
+                escritaInsercao.imprimeDadosP3(parametrosN.get(k), mediaArvoreB2[k][0][0]/execucoes, mediaArvoreB2[k][0][1]/execucoes, mediaArvoreB2[k][0][2]/execucoes);
+            }
+            
+            //Imprime média busca arvore B2
+            escritaBusca.imprimeCabecalioP3("Média Busca - ArvoreB D = 41", false);
+            for(k=0; k<parametrosN.size(); k++) {
+                escritaBusca.imprimeDadosP3(parametrosN.get(k), mediaArvoreB2[k][1][0]/execucoes, mediaArvoreB2[k][1][1]/execucoes, mediaArvoreB2[k][1][2]/execucoes);
+            }
+            
+            escritaInsercao.close();
+            escritaBusca.close();
         }
-        
-        //Fazer impressão do resultado
     }
     //FINAL - PARTE 3
 
